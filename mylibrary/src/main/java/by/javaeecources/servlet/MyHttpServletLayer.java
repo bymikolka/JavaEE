@@ -79,7 +79,7 @@ public class MyHttpServletLayer extends HttpServlet {
 		if (success) {
 			message = "The Person has been successfully updated.";
 		}
-		List<IPerson> personList = repository.getAllPersons();
+		List<IPerson> personList = this.paginatedResult(req);
 		req.setAttribute("idPerson", idPerson);
 		req.setAttribute("message", message);
 		forwardList(req, resp, personList);
@@ -101,11 +101,11 @@ public class MyHttpServletLayer extends HttpServlet {
 		IPerson person = new Person(id, firstname, surname, username, role, description, email);
 
 		long idPerson = repository.addPerson(person);
-		List<IPerson> personsList = repository.getAllPersons();
+		List<IPerson> personList = this.paginatedResult(req);
 		req.setAttribute("idPerson", idPerson);
 		String message = "The new Person has been successfully created.";
 		req.setAttribute("message", message);
-		req.setAttribute("personList", personsList);
+		req.setAttribute("personList", personList);
 		resp.sendRedirect(req.getContextPath() + "/");
 		// forwardList(req, resp, personsList);
 	}
@@ -118,7 +118,7 @@ public class MyHttpServletLayer extends HttpServlet {
 			String message = "The Person has been successfully removed.";
 			req.setAttribute("message", message);
 		}
-		List<IPerson> personList = repository.getAllPersons();
+		List<IPerson> personList = this.paginatedResult(req);
 		forwardList(req, resp, personList);
 	}
 	
@@ -160,5 +160,26 @@ public class MyHttpServletLayer extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+	protected List<IPerson> paginatedResult(HttpServletRequest req) {
+		int currentPage = 1;
+		int recordsPerPage = 10; // temporary mode
+		try {
+			currentPage = Integer.valueOf(req.getParameter("currentPage"));
+			recordsPerPage = Integer.valueOf(req.getParameter("recordsPerPage"));
+			
+		} catch (Exception e) {
+		}
+		List<IPerson> result = (List<IPerson>) repository.getAllPersonsParts(recordsPerPage, currentPage);
+		int rows = repository.getAllPersonsCount();
+		
+		int nOfPages = rows / recordsPerPage;
+
+		if (nOfPages % recordsPerPage > 0) {
+		    nOfPages++;
+		}
+		req.setAttribute("noOfPages", nOfPages -1);
+		req.setAttribute("currentPage", currentPage);
+		req.setAttribute("recordsPerPage", recordsPerPage);
+		return result;
+	}	
 }

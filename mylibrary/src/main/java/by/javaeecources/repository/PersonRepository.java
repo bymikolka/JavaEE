@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import by.javaeecources.entities.Person;
 import by.javaeecources.exceptions.PersonNotFoundException;
 import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonFactory.PersonRole;
-
+import static java.lang.Math.min;
 public abstract class PersonRepository implements IPersonRepository {
 
 	private List<IPerson> personList = null;
@@ -48,6 +48,34 @@ public abstract class PersonRepository implements IPersonRepository {
 		return personList;
 	}
 
+	public int getAllPersonsCount() {
+		return this.getAllPersons().size();
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<IPerson> getAllPersonsParts(int pageSize, int page) {
+		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), pageSize);
+		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(page));
+	}
+	
+	
+	private Map<Object, Object> getAllParts(List<IPerson> list, int pageSize) {
+	    return IntStream.iterate(0, i -> i + pageSize)
+	            .limit((list.size() + pageSize - 1) / pageSize)
+	            .boxed()
+	            .collect(Collectors.toMap(i -> i / pageSize,
+	                           i -> list.subList(i, min(i + pageSize, list.size()))));
+		
+		
+		
+//		return IntStream.range(0, (getAllPersons().size() + pageSize - 1) / pageSize)
+//        .boxed()
+//        .collect(Collectors.toMap(i -> i,
+//                       i -> list.subList(i * pageSize, min(pageSize * (i + 1), list.size()))));		
+	}
+
+	
 	public Long getNewId() {
 		try {
 			IPerson person = this.getAllPersons().stream().max(Comparator.comparing(IPerson::getId)).orElseThrow(Exception::new);

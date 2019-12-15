@@ -7,7 +7,7 @@
 <c:set var="logined" value="<%=session.getAttribute(\"loginedUser\") %>" />
 <div class="bs">
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-		<a href="#" class="navbar-brand">My application</a>
+		<a href="${pageContext.request.contextPath}/" class="navbar-brand">My application</a>
 		<button type="button" class="navbar-toggler" data-toggle="collapse"
 			data-target="#navbarCollapse">
 			<span class="navbar-toggler-icon"></span>
