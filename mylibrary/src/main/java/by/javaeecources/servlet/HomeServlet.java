@@ -27,7 +27,7 @@ public class HomeServlet extends MyHttpServletLayer {
 		String action = req.getParameter("searchAction");
 		Long role = getRole(req);
 		this.getServletContext().setAttribute("role", role);
-		
+
 		if (action != null) {
 			switch (action) {
 			case "searchById":
@@ -56,6 +56,10 @@ public class HomeServlet extends MyHttpServletLayer {
 		case "edit":
 			editPersonAction(req, resp);
 			break;
+		case "logout":
+			logout(req, resp);
+			break;
+
 		}
 
 	}

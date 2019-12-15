@@ -1,15 +1,16 @@
 <%@page import="by.javaeecources.repository.PersonFactory.PersonRole"%>
 <%@page import="by.javaeecources.repository.PersonFactory"%>
+<%@page import="by.javaeecources.entities.UserAccount"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<div class="container">
-	<div class="d-flex h-100">
+<div class="container-fluid">
+	<div class="row">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon3">Select a Role:</span>
 			</div>
-			<form action="#/" method="get">
+			<form action="${pageContext.request.contextPath}/" method="get">
 				<select class="btn btn-outline-dark" name="role">
 					<c:forEach items="${personRoles}" var="option">
 						<option value="${option.role}"
@@ -22,20 +23,27 @@
 		</div>
 	</div>
 </div>
-<div class="text-right">
-<form action ="${pageContext.request.contextPath}/create">         
-    <button type="submit" class="btn btn-primary btn-md">New person</button> 
-</form>
-</div>
 
-<script>
-function deletePerson(id)
-{
-	document.getElementById('idPerson').value=id;
-	document.getElementById('action').value='delete';
-	document.getElementById('personForm').submit();
-}
-</script>
+<div class="text-left">
+	<%
+		if (session.getAttribute("loginedUser") != null) {
+			UserAccount userAccount = (UserAccount) session.getAttribute("loginedUser");
+			if (userAccount.isEditorMode()) {
+				session.setAttribute("editor", true);
+			} else {
+				session.setAttribute("editor", false);
+			}
+		}
+	%>
+	<c:set var="editor" value="<%=session.getAttribute(\"editor\")%>" />
+
+	<c:if test="${editor == true}">
+		<form action="${pageContext.request.contextPath}/create">
+			<button type="submit" class="btn btn-primary btn-md">New
+				person</button>
+		</form>
+	</c:if>
+</div>
 <form action="/" method="post" id="personForm" role="form">
 	<input type="hidden" id="action" name="action" value="${action}" /> 
 	<input
@@ -71,11 +79,10 @@ function deletePerson(id)
 						<td>${person.description}</td>
 						<td>${person.email}</td>
 						<td>${person.username}</td>
-						<td><a href="?idPerson=${person.id}&searchAction=searchById">edit</a></td>
-						<td><a href="?idPerson=${person.id}&searchAction=delete"
-							id="delete"
-							onclick="deletePerson(${person.id})">delete</a>
-						</td>
+						<c:if test="${editor == true}">
+								<td><a href="?idPerson=${person.id}&searchAction=searchById">edit</a></td>
+								<td><a href="?idPerson=${person.id}&searchAction=delete" id="delete" onclick="deletePerson(${person.id})">delete</a> </td>
+						</c:if>							
 					</tr>
 				</c:forEach>
 			</table>
@@ -86,3 +93,11 @@ function deletePerson(id)
 		</c:otherwise>
 	</c:choose>
 </form>
+<script>
+function deletePerson(id)
+{
+	document.getElementById('idPerson').value=id;
+	document.getElementById('action').value='delete';
+	document.getElementById('personForm').submit();
+}
+</script>

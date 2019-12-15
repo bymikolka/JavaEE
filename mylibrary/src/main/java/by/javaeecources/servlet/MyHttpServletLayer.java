@@ -4,19 +4,24 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import by.javaeecources.entities.Person;
+import by.javaeecources.entities.UserAccount;
 import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonRepository;
-
+// It's class should be named as Context or smth like this by not now 
 public class MyHttpServletLayer extends HttpServlet {
+	private static final String LOGINEDUSER = "loginedUser";
 	private static final long serialVersionUID = 1L;
 	protected static final String HOMEVIEW = "/views/homeView.jsp";
 	protected static final String NEWPERSON = "/views/newPerson.jsp";
+	protected static final String LOGINVIEW = "/views/loginView.jsp";
 	
 	IPersonRepository repository = null;
 
@@ -116,5 +121,44 @@ public class MyHttpServletLayer extends HttpServlet {
 		List<IPerson> personList = repository.getAllPersons();
 		forwardList(req, resp, personList);
 	}
+	
+	protected void getStoredUser(HttpServletRequest req, HttpServletResponse resp, UserAccount user){
+		HttpSession session = req.getSession();
 
+		session.setMaxInactiveInterval(30*60);
+		Cookie userName = new Cookie(MyHttpServletLayer.LOGINEDUSER, user.getUsername());
+		resp.addCookie(userName);
+	}
+	
+	public static void storeLoginedUser(HttpSession session, UserAccount loginedUser) {
+		session.setAttribute(MyHttpServletLayer.LOGINEDUSER, loginedUser);
+	}
+
+	
+	protected void logout(HttpServletRequest req, HttpServletResponse resp) {
+		resp.setContentType("text/html");
+    	Cookie[] cookies = req.getCookies();
+    	if(cookies != null){
+    	for(Cookie cookie : cookies){
+    		if(cookie.getName().equals("JSESSIONID")){
+    			System.out.println("JSESSIONID="+cookie.getValue());
+    		}
+    		cookie.setMaxAge(0);
+    		resp.addCookie(cookie);
+    	}
+    	}
+    	HttpSession session = req.getSession(false);
+    	System.out.println("User="+session.getAttribute(MyHttpServletLayer.LOGINEDUSER));
+    	if(session != null){
+    		session.invalidate();
+    	}
+    	//no encoding because we have invalidated the session
+    	try {
+			resp.sendRedirect(req.getContextPath()+"/login");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

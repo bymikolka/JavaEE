@@ -53,9 +53,8 @@ public abstract class PersonRepository implements IPersonRepository {
 			IPerson person = this.getAllPersons().stream().max(Comparator.comparing(IPerson::getId)).orElseThrow(Exception::new);
 			return person.getId()+1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return new Long(1);
 		}
-		return new Long(0);
 	}
 	
 	
