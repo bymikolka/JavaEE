@@ -86,7 +86,8 @@ public class LoginServlet extends MyHttpServletLayer{
 			try {
 				response.sendRedirect(encodedURL);
 			} catch (IOException e) {
-				e.printStackTrace();
+				message = e.getMessage();
+				request.setAttribute("message", message);
 			}
 
 			//response.sendRedirect(request.getContextPath() + "/111	");

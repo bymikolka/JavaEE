@@ -21,7 +21,7 @@ public class HomeServlet extends MyHttpServletLayer {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<PersonRole> personTypes = new ArrayList<PersonRole>(Arrays.asList(PersonRole.values()));
+		List<PersonRole> personTypes = new ArrayList<>(Arrays.asList(PersonRole.values()));
 
 		getServletContext().setAttribute("personRoles", personTypes);
 		String action = req.getParameter("searchAction");

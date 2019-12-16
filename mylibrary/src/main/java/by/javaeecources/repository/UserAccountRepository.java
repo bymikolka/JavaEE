@@ -7,11 +7,11 @@ public class UserAccountRepository {
 		// Auto-generated constructor stub
 	}
 
-	private final static String userID = "admin"; // temp mode
-	private final static String password = "password";
+	private static final String USERID = "admin"; // temp mode
+	private static final String PASSWORD = "password";
 
 	public static UserAccount findUser(UserAccount user) {
-		 if(!(userID.equals(user.getUsername()) && password.equals(user.getPassword()))){
+		 if(!(USERID.equals(user.getUsername()) && PASSWORD.equals(user.getPassword()))){
 	        return null;
 	    }
 		 return user;

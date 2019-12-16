@@ -1,5 +1,7 @@
 package by.javaeecources.repository;
 
+import static java.lang.Math.min;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +16,6 @@ import by.javaeecources.exceptions.PersonNotFoundException;
 import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonFactory.PersonRole;
-import static java.lang.Math.min;
 public abstract class PersonRepository implements IPersonRepository {
 
 	private List<IPerson> personList = null;
@@ -48,15 +49,17 @@ public abstract class PersonRepository implements IPersonRepository {
 		return personList;
 	}
 
+	@Override
 	public int getAllPersonsCount() {
 		return this.getAllPersons().size();
 	}
 
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<IPerson> getAllPersonsParts(int pageSize, int page) {
 		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), pageSize);
-		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(page));
+		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(page-1)); // by the reason of array index always starts with 0 
 	}
 	
 	
@@ -66,16 +69,10 @@ public abstract class PersonRepository implements IPersonRepository {
 	            .boxed()
 	            .collect(Collectors.toMap(i -> i / pageSize,
 	                           i -> list.subList(i, min(i + pageSize, list.size()))));
-		
-		
-		
-//		return IntStream.range(0, (getAllPersons().size() + pageSize - 1) / pageSize)
-//        .boxed()
-//        .collect(Collectors.toMap(i -> i,
-//                       i -> list.subList(i * pageSize, min(pageSize * (i + 1), list.size()))));		
 	}
 
 	
+	@Override
 	public Long getNewId() {
 		try {
 			IPerson person = this.getAllPersons().stream().max(Comparator.comparing(IPerson::getId)).orElseThrow(Exception::new);

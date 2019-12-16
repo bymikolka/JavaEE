@@ -13,7 +13,7 @@ public class TeachersRepository extends PersonRepository {
 
 			for (int i = 0; i < 25; i++) {
 				Teacher teacher = new Teacher(faker.number().randomNumber(), faker.name().firstName(),
-						faker.name().lastName(), faker.name().username(), faker.address().state(),
+						faker.name().lastName(), faker.name().username(), faker.internet().emailAddress(),
 						faker.educator().university());
 				this.addPerson(teacher);
 

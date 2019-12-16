@@ -24,7 +24,6 @@
 	</div>
 </div>
 
-<div class="text-left">
 	<%
 		if (session.getAttribute("loginedUser") != null) {
 			UserAccount userAccount = (UserAccount) session.getAttribute("loginedUser");
@@ -38,6 +37,7 @@
 	<c:set var="editor" value="<%=session.getAttribute(\"editor\")%>" />
 	<c:set var="role" value="<%=getServletContext().getAttribute(\"role\")%>" />
 
+<div class="text-left">
 	<c:if test="${editor == true}">
 		<form action="${pageContext.request.contextPath}/create">
 			<button type="submit" class="btn btn-primary btn-md">New person</button>
@@ -50,11 +50,11 @@
 	<input type="hidden" id="idPerson" name="idPerson" value="${person.id}" />
 	<c:choose>
 		<c:when test="${not empty personList}">
-			<table class="table">
+			<table class="table" aria-describedby="personsTable">
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">Full name</th>
 						<th scope="col">Role</th>
+						<th scope="col">Full name</th>
 						<th scope="col">Description</th>
 						<th scope="col" >E-mail</th>
 						<th scope="col">Username</th>
@@ -68,7 +68,6 @@
 						<c:set var="classSucess" value="info" />
 					</c:if>
 					<tr class="${classSucess}">
-						<td>${person.firstname}&nbsp;${person.surname}</td>
 						<c:set var="tRole" value="${person.role}" />
 						<td>
 							<%
@@ -76,6 +75,7 @@
 													.getShortName());
 							%>
 						</td>
+						<td>${person.firstname}&nbsp;${person.surname}</td>
 						<td>${person.description}</td>
 						<td>${person.email}</td>
 						<td>${person.username}</td>

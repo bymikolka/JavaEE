@@ -1,4 +1,3 @@
-<%@page import="by.javaeecources.entities.UserAccount"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -29,18 +28,16 @@
 
 			<form class="form-inline ml-auto">
 				<input type="hidden" id="searchAction" name="searchAction" value="searchByName" /> 
-					<input class="form-control py-2" name="personName" id="personName" type="search"
-					placeholder="Type the Name or Surname" required="required"> 
+					<input class="form-control py-2" name="personName" id="personName" type="search" 
+						placeholder="Type the Name or Surname" required="required"> 
 					<span class="input-group-append">
-						<button class="btn btn-outline-light" type="submit">
-							<i class="fa fa-search"></i>Search
-						</button>
+						<button class="btn btn-outline-light" type="submit">Search</button>
 					</span>
 			</form>
 		</div>
 	</nav>
 
-	<%
+	<!--%
 		String userName = null;
 		if (session.getAttribute("loginedUser") != null) {
 			UserAccount userAccount = (UserAccount) session.getAttribute("loginedUser");
@@ -54,11 +51,11 @@
 					userName = cookie.getValue();
 			}
 		}
-	%>
+	%-->
 
 	<c:if test="${not empty message}">                
-    <div class="alert alert-success">
-        ${message}
-    </div>
-</c:if> 
+    	<div class="alert alert-success">
+        	${message}
+    	</div>
+	</c:if> 
 </div>
