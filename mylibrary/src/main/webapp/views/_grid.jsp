@@ -24,7 +24,6 @@
 	</div>
 </div>
 
-<div class="text-left">
 	<%
 		if (session.getAttribute("loginedUser") != null) {
 			UserAccount userAccount = (UserAccount) session.getAttribute("loginedUser");
@@ -36,25 +35,26 @@
 		}
 	%>
 	<c:set var="editor" value="<%=session.getAttribute(\"editor\")%>" />
+	<c:set var="role" value="<%=getServletContext().getAttribute(\"role\")%>" />
 
+<div class="text-left">
 	<c:if test="${editor == true}">
 		<form action="${pageContext.request.contextPath}/create">
-			<button type="submit" class="btn btn-primary btn-md">New
-				person</button>
+			<button type="submit" class="btn btn-primary btn-md">New person</button>
 		</form>
 	</c:if>
 </div>
+
 <form action="/" method="post" id="personForm" role="form">
-	<input type="hidden" id="action" name="action" value="${action}" /> 
-	<input
-		type="hidden" id="idPerson" name="idPerson" value="${person.id}" />
+	<input type="hidden" id="action" name="action" value="${action}" />
+	<input type="hidden" id="idPerson" name="idPerson" value="${person.id}" />
 	<c:choose>
 		<c:when test="${not empty personList}">
-			<table class="table">
+			<table class="table" aria-describedby="personsTable">
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">Full name</th>
 						<th scope="col">Role</th>
+						<th scope="col">Full name</th>
 						<th scope="col">Description</th>
 						<th scope="col" >E-mail</th>
 						<th scope="col">Username</th>
@@ -68,7 +68,6 @@
 						<c:set var="classSucess" value="info" />
 					</c:if>
 					<tr class="${classSucess}">
-						<td>${person.firstname}&nbsp;${person.surname}</td>
 						<c:set var="tRole" value="${person.role}" />
 						<td>
 							<%
@@ -76,12 +75,13 @@
 													.getShortName());
 							%>
 						</td>
+						<td>${person.firstname}&nbsp;${person.surname}</td>
 						<td>${person.description}</td>
 						<td>${person.email}</td>
 						<td>${person.username}</td>
 						<c:if test="${editor == true}">
-								<td><a href="?idPerson=${person.id}&searchAction=searchById">edit</a></td>
-								<td><a href="?idPerson=${person.id}&searchAction=delete" id="delete" onclick="deletePerson(${person.id})">delete</a> </td>
+								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=searchById">edit</a></td>
+								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=delete" id="delete" onclick="deletePerson(${person.id})">delete</a> </td>
 						</c:if>							
 					</tr>
 				</c:forEach>
@@ -93,6 +93,43 @@
 		</c:otherwise>
 	</c:choose>
 </form>
+
+
+
+<nav aria-label="Navigation">
+    <ul class="pagination">
+        <c:if test="${currentPage != 1}">
+            <li class="page-item">
+            	<a class="page-link" href="${pageContext.request.contextPath}/?role=${role}&recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">Previous</a>
+            </li>
+        </c:if>
+
+        <c:forEach begin="1" end="${noOfPages}" var="i">
+            <c:choose>
+                <c:when test="${currentPage eq i}">
+                    <li class="page-item active">
+                    	<a class="page-link"> ${i} <span class="sr-only">(current)</span></a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                    	<a class="page-link" href="?role=${role}&recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+        <c:if test="${currentPage lt noOfPages}">
+            <li class="page-item">
+            	<a class="page-link" href="?role=${role}&recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">Next</a>
+            </li>
+        </c:if>              
+    </ul>
+</nav>
+
+
+
+
 <script>
 function deletePerson(id)
 {

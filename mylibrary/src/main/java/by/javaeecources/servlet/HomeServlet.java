@@ -21,12 +21,12 @@ public class HomeServlet extends MyHttpServletLayer {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<PersonRole> personTypes = new ArrayList<PersonRole>(Arrays.asList(PersonRole.values()));
+		List<PersonRole> personTypes = new ArrayList<>(Arrays.asList(PersonRole.values()));
 
 		getServletContext().setAttribute("personRoles", personTypes);
 		String action = req.getParameter("searchAction");
 		Long role = getRole(req);
-		this.getServletContext().setAttribute("role", role);
+		getServletContext().setAttribute("role", role);
 
 		if (action != null) {
 			switch (action) {
@@ -44,7 +44,8 @@ public class HomeServlet extends MyHttpServletLayer {
 			if (role != null) {
 				repository = PersonRepository.getRepository(role);
 			}
-			List<IPerson> result = repository.getAllPersons();
+
+			List<IPerson> result = paginatedResult(req);
 			forwardList(req, resp, result);
 		}
 	}
