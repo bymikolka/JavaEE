@@ -30,13 +30,13 @@ public class GuestsRepository implements IRepository {
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(3), 387)));
 		guestsRepository.add(new Guest(2, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(2), 124)));
-		guestsRepository.add(new Guest(1, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
+		guestsRepository.add(new Guest(3, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(6), 547)));
-		guestsRepository.add(new Guest(1, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
+		guestsRepository.add(new Guest(4, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(4), 138)));
-		guestsRepository.add(new Guest(1, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
+		guestsRepository.add(new Guest(5, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(1), 114)));
-		guestsRepository.add(new Guest(1, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
+		guestsRepository.add(new Guest(6, faker.name().fullName(), faker.address().fullAddress(), faker.address().city(), faker.phoneNumber().phoneNumber(),
                 new CreditCard(faker.finance().creditCard(), LocalDate.now().plusYears(3), 864)));
 	}
 	

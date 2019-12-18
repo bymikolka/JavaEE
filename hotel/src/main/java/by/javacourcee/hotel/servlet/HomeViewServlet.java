@@ -20,7 +20,7 @@ public class HomeViewServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Map<RoomType, Set<Room>> repository = RoomRepository.getAllDataByType();
+		Map<Integer, Set<Room>> repository = RoomRepository.getAllDataByType();
 		req.setAttribute("rooms", repository);
 		getServletContext().getRequestDispatcher(HOMEVIEW).forward(req, resp);
 	}

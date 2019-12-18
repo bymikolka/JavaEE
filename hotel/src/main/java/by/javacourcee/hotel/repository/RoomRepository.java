@@ -21,10 +21,10 @@ public class RoomRepository implements IRepository{
 		return roomRepository;
 	}
 	
-	public static Map<RoomType, Set<Room>> getAllDataByType() {
+	public static Map<Integer, Set<Room>> getAllDataByType() {
 		return getAllData().stream()
-				.sorted(Comparator.comparing(Room::getCodeType))
-				.collect(Collectors.groupingBy(Room::getType, Collectors.toSet()));
+				.sorted(Comparator.comparing(Room::getCodeType).reversed())
+				.collect(Collectors.groupingBy(Room::getCodeType, Collectors.toSet()));
 	}
 	
 	public Room getById(int idRoom) {

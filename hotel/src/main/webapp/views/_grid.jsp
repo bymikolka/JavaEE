@@ -1,40 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="by.javacourcee.hotel.RoomType"%>
 
 <form action="/" method="post" id="rooms" role="form">
 	<input type="hidden" id="action" name="action" value="${action}" />
-	<input type="hidden" id="roomId" name="roomId" value="${person.id}" />
+	<input type="hidden" id="roomId" name="roomId" value="${room.id}" />
+	<div class="container">
+	</div>
+	
 	<c:forEach items="${rooms}" var="roomByTypeRow">
 	<c:choose>
 		<c:when test="${not empty roomByTypeRow}">
-			<c:out value="${roomByTypeRow.key}"/>
-			<table class="table" aria-describedby="roomsTable">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Status</th>
-						<th scope="col">Price per Day</th>
-						<th scope="col">Username</th>
-						<th scope="col">houseKeepingStatus</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<c:forEach var="room" items="${roomByTypeRow.value}">
-					<c:set var="classSucess" value="" />
-					<c:if test="${id == room.id}">
-						<c:set var="classSucess" value="info" />
-					</c:if>
-					<tr class="${classSucess}">
-						<td>${room.id}</td>
-						<td>${room.status}</td>
-						<td>${room.pricePerDay}</td>
-						<td>${room.houseKeepingStatus}</td>
-						
-						
-					</tr>
-				</c:forEach>
-			</table>
+			<c:set var="key" value="${roomByTypeRow.key}"/>
+			<% 
+				out.print(RoomType.getRoomType((Integer)pageContext.getAttribute("key")));
+			%>
+			<table class="table">
+			<c:forEach begin="0" items="${roomByTypeRow.value}" var="room" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 3 eq 0}">
+						<c:set var="curIndex" value="${loop.index}" />
+						<c:if test="${not empty curIndex}">
+							<c:forEach begin="${curIndex}" end="${curIndex+2}"
+								items="${roomByTypeRow.value}" var="room" varStatus="loop">
+								<td>
+									<div class="card" id="cardNo${loop.index}">
+										<div class="card-body">
+											<h4 class="card-title">${room.id}</h4>
+											<h5 class="card-subtitle mb-2 text-muted">${room.status}</h5>
+											<p class="card-text">${room.pricePerDay}</p>
+											<!--a href="buyProduct?code=${product.code}" class="card-link">buy</a-->
+										</div>
+									</div>
+								</td>
+							</c:forEach>
+						</c:if>
+					</c:when>
+					<c:otherwise>
+					<tr/>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</table>
 		</c:when>
 		<c:otherwise>
 			<br>
