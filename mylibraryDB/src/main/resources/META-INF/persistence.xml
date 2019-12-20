@@ -6,8 +6,9 @@
     <persistence-unit name="by.javaeecources">
         <description>JPA Settings</description>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>by.javaeecources.entities.UserAccount</class>
         <class>by.javaeecources.entities.Person</class>
+        <class>by.javaeecources.entities.Teacher</class>
+        <class>by.javaeecources.entities.UserAccount</class>
         <properties>
             <!-- property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/-->
             <!-- property name="hibernate.hbm2ddl.auto" value="create-drop"/-->

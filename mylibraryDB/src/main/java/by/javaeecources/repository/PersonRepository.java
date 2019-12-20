@@ -104,7 +104,7 @@ public abstract class PersonRepository implements IPersonRepository {
 		EntityManager em = getEntityManager();	
 		em.getTransaction().begin();
 		
-		em.persist(person);
+		em.merge(person);
 		em.getTransaction().commit();
 		em.clear();
 		return person.getId();

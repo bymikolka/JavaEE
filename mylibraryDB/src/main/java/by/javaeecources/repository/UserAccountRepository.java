@@ -11,9 +11,9 @@ public class UserAccountRepository {
 	private static final String PASSWORD = "password";
 
 	public static UserAccount findUser(UserAccount user) {
-		 if(!(USERID.equals(user.getUsername()) && PASSWORD.equals(user.getPassword()))){
-	        return null;
-	    }
+//		 if(!(USERID.equals(user.getUsername()) && PASSWORD.equals(user.getPassword()))){
+//	        return null;
+//	    }
 		 return user;
 	}
 }

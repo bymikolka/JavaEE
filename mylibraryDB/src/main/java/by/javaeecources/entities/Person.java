@@ -8,8 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import by.javaeecources.interfaces.IPerson;
 import lombok.Data;
+import lombok.ToString;
 @Data
 @Entity
+@ToString
 public class Person implements IPerson {
 	@NotNull
 	@Column(nullable = false)
@@ -62,6 +64,36 @@ public class Person implements IPerson {
 	@Override
 	public String getFullName() {
 		return String.format("%s %s", this.firstname, this.surname);
+	}
+
+	@Override
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long getRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setId(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
