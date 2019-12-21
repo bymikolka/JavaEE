@@ -45,31 +45,6 @@
 		</form>
 	</c:if>
 </div>
-<script type="text/javascript">
-
-function confirmDialog(role, id)  {
-     var result = confirm("Do you want to continue?");
-     if(result)  {
-   		var url = "?role="+role+"&idPerson="+id+"&searchAction=delete";
-   		document.getElementById('delete').setAttribute('href', url);
-   		alert(document.getElementById('delete').href);
-   		
-   		deletePerson(id);
-     }
-}
-
-function deletePerson(role, id)
-{
-	document.getElementById('idPerson').value=id;
-	document.getElementById('action').value='delete';
-	document.getElementById('personForm').submit();
-	var url = "?role="+role+"&idPerson="+id+"&searchAction=delete";
-   	document.getElementById('delete').setAttribute('href', url);
-
-	alert(document.getElementById('delete').href);
-	alert("Submit");
-}
-</script>
 <form action="/" method="post" id="personForm" role="form">
 	<input type="hidden" id="action" name="action" value="${action}" />
 	<input type="hidden" id="idPerson" name="idPerson" value="${person.id}" />
@@ -106,10 +81,7 @@ function deletePerson(role, id)
 						<td>${person.username}</td>
 						<c:if test="${editor == true}">
 								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=searchById">edit</a></td>
-								
-								<td><a href="${pageContext.request.contextPath}/" id="delete" onclick="if(confirm('Format the hard disk?')) deletePerson(${role}, ${person.id}); ">delete</a> </td>
-								<!--td><a href="${pageContext.request.contextPath}/" id="delete" onclick="confirmDialog(${role},${person.id})">delete</a> </td-->
-								<!-- td><a href="?role=${role}&idPerson=${person.id}&searchAction=delete" id="delete" onclick="deletePerson(${person.id})">delete</a> </td-->
+								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=delete">del</a></td>
 						</c:if>							
 					</tr>
 				</c:forEach>

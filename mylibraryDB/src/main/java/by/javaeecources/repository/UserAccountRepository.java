@@ -10,7 +10,8 @@ public class UserAccountRepository {
 	}
 
 	public static UserAccount findUser(UserAccount user) {
-		Query query = PersonRepository.getEntityManager().createQuery("from users WHERE username = :name", UserAccount.class);
+		Query query = PersonRepository.getEntityManager()
+				.createQuery("from users WHERE username = :name", UserAccount.class);
 		query.setParameter("name", user.getUsername());
 		
 		if(query.getResultList()==null || query.getResultList().isEmpty()) {

@@ -13,10 +13,11 @@ import javax.validation.constraints.NotNull;
 import by.javaeecources.interfaces.IPerson;
 import lombok.Data;
 import lombok.ToString;
+
 @Data
 @Entity(name = "person")
 @ToString
-public class Person implements IPerson ,Serializable {
+public class Person implements IPerson, Serializable{
 	private static final long serialVersionUID = 1L;
 	@NotNull
 	@Column(nullable = false)
@@ -37,15 +38,15 @@ public class Person implements IPerson ,Serializable {
 	@Column(nullable = false)
 	private Long role = 0L;
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="pk_sequence")
-	@SequenceGenerator(name="pk_sequence",sequenceName="person_id_seq", allocationSize=1)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+	@SequenceGenerator(name = "pk_sequence", sequenceName = "person_id_seq", allocationSize = 1)
 	private Long id = 0L;
 
 	public Person() {
 		// Auto-generated constructor stub
 	}
-	
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -73,7 +74,8 @@ public class Person implements IPerson ,Serializable {
 		this.role = getRole();
 	}
 
-	public Person(Long id, String firstname, String lastname, String username, String role, String email, String description) {
+	public Person(Long id, String firstname, String lastname, String username, String role, String email,
+			String description) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -84,7 +86,6 @@ public class Person implements IPerson ,Serializable {
 		this.role = Long.parseLong(role);
 	}
 
-	
 	@Override
 	public String getFullName() {
 		return String.format("%s %s", this.firstname, this.lastname);
@@ -114,5 +115,41 @@ public class Person implements IPerson ,Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
+
+	@Override
+	public IPerson cloneObj(IPerson person) {
+		this.setFirstname(person.getFirstname());
+		this.setUsername(person.getUsername());
+		this.setLastname(person.getLastname());
+		this.setDescription(person.getDescription());
+		this.setEmail(person.getEmail());
+		this.setRole(person.getRole());
+		return this;
+	}
+
 
 }
