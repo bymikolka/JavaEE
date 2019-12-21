@@ -38,7 +38,7 @@
 		</div>
 	</form>
 
-	<p style="color: blue;">Username/password: admin/password</p>
+	<p style="color: blue;">Username/password: admin/admin</p>
 
 	<jsp:include page="_footer.jsp"></jsp:include>
 </body>

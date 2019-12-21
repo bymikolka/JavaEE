@@ -1,3 +1,15 @@
+CREATE ROLE myuser WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION
+  ENCRYPTED PASSWORD 'md5dd9c52d41abcc8c5de5d717d9fd2efee'; --mypass
+
+ALTER ROLE myuser SET search_path TO public;
+
+
 CREATE DATABASE library
     WITH 
     OWNER = myuser
@@ -20,11 +32,7 @@ CREATE TABLE public.person
     role numeric NOT NULL,
     CONSTRAINT "personPK" PRIMARY KEY (id)
 );
-/*CREATE SEQUENCE person_id_seq
-INCREMENT 1
-START 1
-OWNED BY person.id;
-*/
+
 ALTER TABLE public.person
     OWNER to myuser;
     
