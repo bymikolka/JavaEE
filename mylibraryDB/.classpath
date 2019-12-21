@@ -29,6 +29,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Development/eclipse/workspace-2019-09/JavaEE/mylibraryDB/src/main/webapp/WEB-INF/lib/h2-1.4.200.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

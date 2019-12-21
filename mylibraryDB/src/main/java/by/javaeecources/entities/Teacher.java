@@ -1,14 +1,16 @@
 package by.javaeecources.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import lombok.ToString;
 
 @ToString
+@Table(name = "person")
 @Entity
 public class Teacher extends Person {
-	public Teacher(Long id, String firstname, String surname, String userName, String email, String description) {
-		super(id, firstname, surname, userName, email, description);
+	public Teacher(Long id, String firstname, String lastname, String userName, String email, String description) {
+		super(id, firstname, lastname, userName, email, description);
 	}
 public Teacher() {
 	// Auto-generated constructor stub

@@ -1,18 +1,23 @@
 package by.javaeecources.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
 import by.javaeecources.interfaces.IPerson;
 import lombok.Data;
 import lombok.ToString;
 @Data
-@Entity
+@Entity(name = "person")
 @ToString
-public class Person implements IPerson {
+public class Person implements IPerson ,Serializable {
+	private static final long serialVersionUID = 1L;
 	@NotNull
 	@Column(nullable = false)
 	private String username;
@@ -21,40 +26,59 @@ public class Person implements IPerson {
 	private String firstname;
 	@NotNull
 	@Column(nullable = false)
-	private String surname;
+	private String lastname;
 	@NotNull
 	@Column(nullable = false)
 	private String description;
 	@NotNull
 	@Column(nullable = false)
 	private String email;
+	@NotNull
+	@Column(nullable = false)
 	private Long role = 0L;
 	@Id
 	@Column(name="id")
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="pk_sequence")
+	@SequenceGenerator(name="pk_sequence",sequenceName="person_id_seq", allocationSize=1)
 	private Long id = 0L;
 
 	public Person() {
 		// Auto-generated constructor stub
 	}
 	
-	public Person(Long id, String firstname, String surname, String username, String email, String description) {
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public Person(Long id, String firstname, String lastname, String username, String email, String description) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.firstname = firstname;
-		this.surname = surname;
+		this.lastname = lastname;
 		this.email = email;
 		this.description = description;
 		this.role = getRole();
 	}
 
-	public Person(Long id, String firstname, String surname, String username, String role, String email, String description) {
+	public Person(Long id, String firstname, String lastname, String username, String role, String email, String description) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.firstname = firstname;
-		this.surname = surname;
+		this.lastname = lastname;
 		this.email = email;
 		this.description = description;
 		this.role = Long.parseLong(role);
@@ -63,37 +87,32 @@ public class Person implements IPerson {
 	
 	@Override
 	public String getFullName() {
-		return String.format("%s %s", this.firstname, this.surname);
+		return String.format("%s %s", this.firstname, this.lastname);
 	}
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.description;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.username;
 	}
 
 	@Override
 	public Long getRole() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.role;
 	}
 
 	@Override
 	public void setId(Long id) {
-		// TODO Auto-generated method stub
-		
+		this.id = id;
 	}
 
 }

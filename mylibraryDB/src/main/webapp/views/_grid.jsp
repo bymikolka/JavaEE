@@ -1,6 +1,7 @@
-<%@page import="by.javaeecources.repository.PersonFactory.PersonRole"%>
-<%@page import="by.javaeecources.repository.PersonFactory"%>
 <%@page import="by.javaeecources.entities.UserAccount"%>
+<%@page import="by.javaeecources.repository.PersonFactory"%>
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -99,7 +100,7 @@ function deletePerson(role, id)
 													.getShortName());
 							%>
 						</td>
-						<td>${person.firstname}&nbsp;${person.surname}</td>
+						<td>${person.firstname}&nbsp;${person.lastname}</td>
 						<td>${person.description}</td>
 						<td>${person.email}</td>
 						<td>${person.username}</td>

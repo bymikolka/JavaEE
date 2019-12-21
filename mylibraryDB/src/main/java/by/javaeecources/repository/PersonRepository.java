@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import by.javaeecources.exceptions.PersonNotFoundException;
 import by.javaeecources.interfaces.IPerson;
@@ -23,7 +24,8 @@ import by.javaeecources.repository.PersonFactory.PersonRole;
 //https://www.concretepage.com/java/jpa/java-persistence-api-example
 //https://stackoverflow.com/questions/7748223/jpa-createentitymanagerfactory-returns-null
 public abstract class PersonRepository implements IPersonRepository {
-	
+	public PersonRepository() {
+	}
 	
 	private static final EntityManagerFactory emFactory;
 	static {
@@ -37,6 +39,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	private List<IPerson> personList = null;
 
 	static Map<Long, IPersonRepository> map = null;
+	Long role;
 	public static IPersonRepository getRepository(Long role) {
 		// potentially fck up place 
 		if(map == null) {
@@ -52,17 +55,15 @@ public abstract class PersonRepository implements IPersonRepository {
 			personRepository = new TeachersRepository();
 		}
 		// data faker temporary method
-		personRepository.fillRepoWithFakeData();
 		map.put(role, personRepository);
 		return personRepository;
 	};
 	
 	@Override
 	public List<IPerson> getAllPersons() {
-		if (personList == null) {
-			personList = new ArrayList<>();
-		}
-		return personList;
+		Query query = this.getEntityManager().createQuery("from person WHERE role = :role", IPerson.class);
+		query.setParameter("role", this.getRole());
+		return query.getResultList();
 	}
 
 	@Override
@@ -99,8 +100,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 	
 	
-	@Override
-	public Long addPerson(IPerson person) {
+	public static Long addPerson(IPerson person) {
 		EntityManager em = getEntityManager();	
 		em.getTransaction().begin();
 		
@@ -140,12 +140,20 @@ public abstract class PersonRepository implements IPersonRepository {
 
 	@Override
 	public IPerson getPersonById(Long id) throws PersonNotFoundException {
-		Optional<IPerson> match = personList.stream().filter(e -> e.getId().longValue() == id.longValue()).findFirst();
-		if (match.isPresent()) {
-			return match.get();
-		} else {
-			throw new PersonNotFoundException(String.format("The Person with id %s not found", id));
+		Query query = this.getEntityManager().createQuery("from person WHERE id = :id", IPerson.class);
+		query.setParameter("id", id);
+		if(query.getResultList()==null || query.getResultList().isEmpty()) {
+			return null;
 		}
+		else {
+			return (IPerson) query.getResultList().get(0);
+		}
+//		Optional<IPerson> match = personList.stream().filter(e -> e.getId().longValue() == id.longValue()).findFirst();
+//		if (match.isPresent()) {
+//			return match.get();
+//		} else {
+//			throw new PersonNotFoundException(String.format("The Person with id %s not found", id));
+//		}
 	}
 
 }

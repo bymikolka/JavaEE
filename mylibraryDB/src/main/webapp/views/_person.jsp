@@ -25,8 +25,8 @@ function addAction(action)
                     <input type="text" name="firstname" id="firstname" class="form-control" value="${person.firstname}" 
                         required="required"/>                                   
 
-                    <label for="surname" class="control-label col-xs-4">Last name:</label>                   
-                    <input type="text" name="surname" id="surname" class="form-control" value="${person.surname}" 
+                    <label for="lastname" class="control-label col-xs-4">Last name:</label>                   
+                    <input type="text" name="lastname" id="lastname" class="form-control" value="${person.lastname}" 
                         required="required"/> 
 
                     <label for="username" class="control-label col-xs-4">Username:</label>                   

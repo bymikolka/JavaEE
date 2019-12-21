@@ -67,7 +67,7 @@ public class MyHttpServletLayer extends HttpServlet {
 	protected void editPersonAction(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String firstname = req.getParameter("firstname");
-		String surname = req.getParameter("surname");
+		String lastname = req.getParameter("lastname");
 		String role = req.getParameter("role");
 		String description = req.getParameter("description");
 		String email = req.getParameter("email");
@@ -75,7 +75,7 @@ public class MyHttpServletLayer extends HttpServlet {
 
 		Long idPerson = Long.parseLong(req.getParameter(MyHttpServletLayer.IDPERSON));
 
-		IPerson person = new Person(idPerson, firstname, surname, username, role, description, email);
+		IPerson person = new Person(idPerson, firstname, lastname, username, role, description, email);
 		person.setId(idPerson);
 		boolean success = repository.updatePerson(person);
 		String message = null;
@@ -91,7 +91,7 @@ public class MyHttpServletLayer extends HttpServlet {
 	protected void addPersonAction(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		String firstname = req.getParameter("firstname");
-		String surname = req.getParameter("surname");
+		String lastname = req.getParameter("lastname");
 		String username = req.getParameter("username");
 		String role = req.getParameter("role");
 		String description = req.getParameter("description");
@@ -100,9 +100,9 @@ public class MyHttpServletLayer extends HttpServlet {
 
 		repository = PersonRepository.getRepository(repRole);
 		Long id = repository.getNewId(); // it's not a great idea, but w/o DB it works
-		IPerson person = new Person(id, firstname, surname, username, role, description, email);
+		IPerson person = new Person(id, firstname, lastname, username, role, description, email);
 
-		long idPerson = repository.addPerson(person);
+		long idPerson = ((PersonRepository) repository).addPerson(person);
 		List<IPerson> personList = this.paginatedResult(req);
 		req.setAttribute(MyHttpServletLayer.IDPERSON, idPerson);
 		String message = "The new Person has been successfully created.";
