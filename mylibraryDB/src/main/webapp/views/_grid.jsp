@@ -81,7 +81,7 @@
 						<td>${person.username}</td>
 						<c:if test="${editor == true}">
 								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=searchById">edit</a></td>
-								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=delete">del</a></td>
+								<td><a href="?role=${role}&idPerson=${person.id}&searchAction=delete">delete</a></td>
 						</c:if>							
 					</tr>
 				</c:forEach>
