@@ -7,7 +7,7 @@ import by.javaeecources.exceptions.PersonNotFoundException;
 public interface IPersonRepository {
 
 	List<IPerson> getAllPersons();
-	public List<IPerson> getAllPersonsParts(int pageSize, int page);
+	public List<IPerson> getAllPersonsParts(Long id, int pageSize, int page);
 	public List<IPerson> searchPersonByName(String searchParam);
 	
 	public int getAllPersonsCount();

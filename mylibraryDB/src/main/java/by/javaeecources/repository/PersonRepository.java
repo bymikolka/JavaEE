@@ -1,14 +1,10 @@
 package by.javaeecources.repository;
 
-import static java.lang.Math.min;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -76,18 +72,38 @@ public abstract class PersonRepository implements IPersonRepository {
 		return this.getAllPersons().size();
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
-	public List<IPerson> getAllPersonsParts(int pageSize, int page) {
-		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), pageSize);
-		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(page - 1)); // by the reason of array index always
-																					// starts with 0
+	@Override
+	public List<IPerson> getAllPersonsParts(Long role, int recordsPerPage, int currentPage) {
+		int start = currentPage * recordsPerPage - recordsPerPage;
+		currentPage = start;
+		int limit = recordsPerPage;
+		int offset = 0;
+		if (currentPage > 1) {
+			offset = currentPage - 1;
+		} else {
+			offset = 0;
+		}
+
+		Query query = getEntityManager().createQuery("from person where role = :role order by id", IPerson.class);
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
+		
+		query.setParameter("role", role);
+		return query.getResultList();
+		
+		
+		
+		
+//		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), recordsPerPage);
+//		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(currentPage - 1)); // by the reason of array index always
+//																					// starts with 0
 	}
 
-	private Map<Object, Object> getAllParts(List<IPerson> list, int pageSize) {
-		return IntStream.iterate(0, i -> i + pageSize).limit((list.size() + pageSize - 1) / pageSize).boxed()
-				.collect(Collectors.toMap(i -> i / pageSize, i -> list.subList(i, min(i + pageSize, list.size()))));
-	}
+//	private Map<Object, Object> getAllParts(List<IPerson> list, int recordsPerPage) {
+//		return IntStream.iterate(0, i -> i + recordsPerPage).limit((list.size() + recordsPerPage - 1) / recordsPerPage).boxed()
+//				.collect(Collectors.toMap(i -> i / recordsPerPage, i -> list.subList(i, min(i + recordsPerPage, list.size()))));
+//	}
 
 	@Override
 	public Long getNewId() {

@@ -171,7 +171,7 @@ public class MyHttpServletLayer extends HttpServlet {
 		} catch (Exception e) {
 			//
 		}
-		List<IPerson> result = repository.getAllPersonsParts(recordsPerPage, currentPage);
+		List<IPerson> result = repository.getAllPersonsParts(repository.getRole(), recordsPerPage, currentPage);
 		int rows = repository.getAllPersonsCount();
 
 		int nOfPages = rows / recordsPerPage;
