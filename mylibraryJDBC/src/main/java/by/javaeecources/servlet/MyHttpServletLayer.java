@@ -2,6 +2,7 @@ package by.javaeecources.servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import by.javaeecources.db.ConnectionContext;
 import by.javaeecources.entities.Person;
 import by.javaeecources.entities.UserAccount;
+import by.javaeecources.exceptions.PersonNotFoundException;
 import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonRepository;
@@ -101,10 +103,10 @@ public class MyHttpServletLayer extends HttpServlet {
 		Long repRole = (Long) getServletContext().getAttribute("role");
 		Connection conn = ConnectionContext.getStoredConnection(req);
 		repository = PersonRepository.getRepository(repRole, conn);
-		Long id = repository.getNewId(); // it's not a great idea, but w/o DB it works
-		IPerson person = new Person(id, firstname, lastname, username, role, description, email);
+		//Long id = repository.getNewId(); // it's not a great idea, but w/o DB it works
+		IPerson person = new Person(0L, firstname, lastname, username, role, description, email);
 
-		long idPerson = ((PersonRepository) repository).addPerson(person, ConnectionContext.getStoredConnection(req));
+		long idPerson = repository.addPerson(person, ConnectionContext.getStoredConnection(req));
 		List<IPerson> personList = this.paginatedResult(req);
 		req.setAttribute(MyHttpServletLayer.IDPERSON, idPerson);
 		String message = "The new Person has been successfully created.";

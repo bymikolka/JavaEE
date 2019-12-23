@@ -23,18 +23,35 @@ DROP TABLE public.person;
 
 CREATE TABLE public.person
 (
-    id serial NOT NULL,
+    id integer NOT NULL DEFAULT nextval('person_id_seq'::regclass),
     username text NOT NULL,
     lastname text NOT NULL,
     firstname text NOT NULL,
     description text NOT NULL,
     email text NOT NULL,
     role numeric NOT NULL,
+	"DTYPE" text NOT NULL,
     CONSTRAINT "personPK" PRIMARY KEY (id)
 );
 
 ALTER TABLE public.person
     OWNER to myuser;
+    
+-- SEQUENCE: public.person_id_seq
+
+-- DROP SEQUENCE public.person_id_seq;
+
+CREATE SEQUENCE public.person_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER SEQUENCE public.person_id_seq
+    OWNER TO myuser;   
+    
+    
     
  -- Table: public.person
 
@@ -55,10 +72,9 @@ ALTER TABLE public.users
     OWNER to myuser;
    
     
-INSERT INTO public.users(
-	id, username, password, "group")
-	VALUES (1, 'admin', 'admin', 1);
+INSERT INTO public.users(username, password, "group")
+	VALUES ( 'admin', 'admin', 1);
 	
 	INSERT INTO public.users(
-	id, username, password, "group")
-	VALUES (2, 'user', 'user', 0);
+	username, password, "group")
+	VALUES ('user', 'user', 0);

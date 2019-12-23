@@ -145,7 +145,7 @@ public abstract class PersonRepository implements IPersonRepository {
 		}
 	}
 
-	public static Long addPerson(IPerson person, Connection connection) {
+	public Long addPerson(IPerson person, Connection connection) {
 		
 		/*List<Field> fields = Arrays.asList(person.getClass().getDeclaredFields());
 	    for(Field field: fields) {

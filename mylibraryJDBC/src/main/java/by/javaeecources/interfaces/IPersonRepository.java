@@ -17,6 +17,7 @@ public interface IPersonRepository {
 	
 	public IPerson getPersonById(Connection connection, Long id) throws PersonNotFoundException;
 	public boolean updatePerson(IPerson person, Connection connection);
+	public Long addPerson(IPerson person, Connection connection);
 	public boolean deletePerson(Connection connection, Long id);
 	public Long getNewId();
 	public Long getRole();
