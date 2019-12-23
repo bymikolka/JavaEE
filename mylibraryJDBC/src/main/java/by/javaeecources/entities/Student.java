@@ -5,6 +5,8 @@ import lombok.ToString;
 @ToString
 public class Student extends Person {
 
+	private static final long serialVersionUID = 1L;
+
 	public Student(Long id, String firstname, String lastname, String username, String email, String description) {
 		super(id, firstname, lastname, username, email, description);
 	}

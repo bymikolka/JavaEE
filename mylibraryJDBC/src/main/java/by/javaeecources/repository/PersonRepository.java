@@ -20,8 +20,6 @@ import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonFactory.PersonRole;
 
-//https://www.concretepage.com/java/jpa/java-persistence-api-example
-//https://stackoverflow.com/questions/7748223/jpa-createentitymanagerfactory-returns-null
 public abstract class PersonRepository implements IPersonRepository {
 	
 	public PersonRepository() {
@@ -205,15 +203,7 @@ public abstract class PersonRepository implements IPersonRepository {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-//		EntityManager em = getEntityManager();
-//		em.getTransaction().begin();
-//
-//		em.merge(person);
-//		em.getTransaction().commit();
-//		em.clear();
+
 		return person.getId();
 	}
 
@@ -242,15 +232,6 @@ public abstract class PersonRepository implements IPersonRepository {
 		}
 		return true;
 
-//		int indx = 0;
-//		Optional<IPerson> match = personList.stream().filter(c -> c.getId().longValue() == person.getId().longValue()).findFirst();
-//		if (match.isPresent()) {
-//			indx = personList.indexOf(match.get());
-//			personList.set(indx, person);
-//			return true;
-//		} else {
-//			return false;
-//		}
 	}
 
 	@Override
@@ -355,21 +336,6 @@ public abstract class PersonRepository implements IPersonRepository {
 			e.printStackTrace();
 		}
 		return personList!=null?personList.get(0):null;
-		
-//		Query query = getEntityManager().createQuery("from person WHERE id = :id", IPerson.class);
-//		query.setParameter("id", id);
-//		if (query.getResultList() == null || query.getResultList().isEmpty()) {
-//			return null;
-//		} else {
-//			return (IPerson) query.getResultList().get(0);
-//		}
-//		Optional<IPerson> match = personList.stream().filter(e -> e.getId().longValue() == id.longValue()).findFirst();
-//		if (match.isPresent()) {
-//			return match.get();
-//		} else {
-//			throw new PersonNotFoundException(String.format("The Person with id %s not found", id));
-//		}
-		
 	}
 
 }
