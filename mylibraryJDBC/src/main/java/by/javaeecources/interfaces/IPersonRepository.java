@@ -7,18 +7,22 @@ import by.javaeecources.exceptions.PersonNotFoundException;
 
 public interface IPersonRepository {
 
-	List<IPerson> getAllPersons(Connection connection);
+	List<IPerson> getAllPersons();
 	
 	public List<IPerson> getPersonList();
-	public List<IPerson> getAllPersonsParts(Connection connection, Long id, int pageSize, int page);
-	public List<IPerson> searchPersonByName(Connection connection, String searchParam);
+	public List<IPerson> getAllPersonsParts(Long id, int pageSize, int page);
+	public List<IPerson> searchPersonByName(String searchParam);
 	
-	public int getAllPersonsCount(Connection connection);
+	public int getAllPersonsCount();
 	
-	public IPerson getPersonById(Connection connection, Long id) throws PersonNotFoundException;
-	public boolean updatePerson(IPerson person, Connection connection);
-	public Long addPerson(IPerson person, Connection connection);
-	public boolean deletePerson(Connection connection, Long id);
+	public IPerson getPersonById(Long id) throws PersonNotFoundException;
+	public boolean updatePerson(IPerson person);
+	public Long addPerson(IPerson person);
+	public boolean deletePerson(Long id);
 	public Long getNewId();
 	public Long getRole();
+
+	public void setConnection(Connection connection);
+
+
 }

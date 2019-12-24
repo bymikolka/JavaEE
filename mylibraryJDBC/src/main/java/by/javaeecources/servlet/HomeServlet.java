@@ -44,7 +44,8 @@ public class HomeServlet extends MyHttpServletLayer {
 			}
 		} else {
 			if (role != null) {
-				repository = PersonRepository.getRepository(role, conn);
+				repository = PersonRepository.getRepository(role);
+				repository.setConnection(ConnectionContext.getStoredConnection(req));
 			}
 
 			List<IPerson> result = paginatedResult(req);

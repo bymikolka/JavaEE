@@ -21,12 +21,19 @@ import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonFactory.PersonRole;
 
 public abstract class PersonRepository implements IPersonRepository {
-	
+	Connection connection;
 	public PersonRepository() {
 	}
 
 	private List<IPerson> personList = null;
 
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+
+	
 	@Override
 	public List<IPerson> getPersonList() {
 		if(personList!=null) {
@@ -38,12 +45,11 @@ public abstract class PersonRepository implements IPersonRepository {
 	static Map<Long, IPersonRepository> map = null;
 	Long role;
 
-	public static IPersonRepository getRepository(Long role, Connection connection) {
+	public static IPersonRepository getRepository(Long role) {
 		// potentially fck up place
 		if (map == null) {
 			map = new HashMap<>();
 		}
-		;
 		if (map.get(role) != null) {
 			return map.get(role);
 		}
@@ -58,7 +64,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	};
 
 	
-	private List<IPerson> getAllPersonRecords(Connection connection, String sql, Long limit, Long offset){
+	private List<IPerson> getAllPersonRecords(String sql, Long limit, Long offset){
 		List<Field> fields = Arrays.asList(Person.class.getDeclaredFields());
 	    for(Field field: fields) {
 	        field.setAccessible(true);
@@ -99,12 +105,12 @@ public abstract class PersonRepository implements IPersonRepository {
 	
 	
 	@Override
-	public List<IPerson> getAllPersons(Connection connection) {
+	public List<IPerson> getAllPersons() {
 		String query = "SELECT * from person WHERE role = ? order by id";
-		return this.getAllPersonRecords(connection, query, null, null);
+		return this.getAllPersonRecords(query, null, null);
 	}
 	@Override
-	public int getAllPersonsCount(Connection connection) {
+	public int getAllPersonsCount() {
 		String query = "SELECT count(*) from person WHERE role = ?";
 		try (PreparedStatement statement = connection.prepareStatement(query)){
 			statement.setLong(1, this.getRole());
@@ -120,7 +126,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 
 	@Override
-	public List<IPerson> getAllPersonsParts(Connection connection, Long role, int recordsPerPage, int currentPage) {
+	public List<IPerson> getAllPersonsParts(Long role, int recordsPerPage, int currentPage) {
 		int start = currentPage * recordsPerPage - recordsPerPage;
 		currentPage = start;
 		Long limit = Long.valueOf(recordsPerPage);
@@ -131,7 +137,7 @@ public abstract class PersonRepository implements IPersonRepository {
 			offset = 0L;
 		}
 		String query = "SELECT * from person WHERE role = ? order by id limit ? offset ?";
-		return this.getAllPersonRecords(connection, query, limit, offset);
+		return this.getAllPersonRecords(query, limit, offset);
 	}
 
 	@Override
@@ -145,7 +151,8 @@ public abstract class PersonRepository implements IPersonRepository {
 		}
 	}
 
-	public Long addPerson(IPerson person, Connection connection) {
+	@Override
+	public Long addPerson(IPerson person) {
 		
 		/*List<Field> fields = Arrays.asList(person.getClass().getDeclaredFields());
 	    for(Field field: fields) {
@@ -208,7 +215,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 
 	@Override
-	public boolean updatePerson(IPerson person, Connection connection) {
+	public boolean updatePerson(IPerson person) {
 		String s = "UPDATE person SET username = ?, lastname = ?, firstname= ?, description = ?, email = ? WHERE id = ? ";
 		try (PreparedStatement statement = connection.prepareStatement(s, Statement.RETURN_GENERATED_KEYS)){
 
@@ -235,10 +242,10 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 
 	@Override
-	public boolean deletePerson(Connection connection, Long id) {
+	public boolean deletePerson(Long id) {
 		IPerson pDB;
 		try {
-			pDB = this.getPersonById(connection,id);
+			pDB = this.getPersonById(id);
 			if (pDB != null) {
 				String s = "DELETE FROM person WHERE id = ? ";
 				try (PreparedStatement statement = connection.prepareStatement(s)){
@@ -256,7 +263,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 
 	@Override
-	public List<IPerson> searchPersonByName(Connection connection, String searchParam) {
+	public List<IPerson> searchPersonByName(String searchParam) {
 
 		String sql = "SELECT * FROM person WHERE firstname like ? or lastname like ?";
 		List<Field> fields = Arrays.asList(Person.class.getDeclaredFields());
@@ -297,7 +304,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	}
 
 	@Override
-	public IPerson getPersonById(Connection connection, Long id) throws PersonNotFoundException {
+	public IPerson getPersonById(Long id) throws PersonNotFoundException {
 		
 		
 		String sql = "SELECT id, username, lastname, firstname, description, email, role, \"DTYPE\" FROM person WHERE id = ? ";

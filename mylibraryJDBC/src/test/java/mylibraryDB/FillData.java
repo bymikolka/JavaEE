@@ -17,14 +17,18 @@ public class FillData {
 			Teacher teacher = new Teacher(faker.number().randomNumber(), faker.name().firstName(),
 					faker.name().lastName(), faker.name().username(), faker.internet().emailAddress(),
 					faker.educator().university());
-			new TeachersRepository().addPerson(teacher, PostgresDBConnection.getConnection());
+			TeachersRepository rep = new TeachersRepository();
+			rep.setConnection(PostgresDBConnection.getConnection());
+			rep.addPerson(teacher);
 
 		}
 		for (int i = 0; i < 50; i++) {
 			Student teacher = new Student(faker.number().randomNumber(), faker.name().firstName(),
 					faker.name().lastName(), faker.name().username(), faker.internet().emailAddress(),
 					faker.educator().university());
-			new StudentsRepository().addPerson(teacher, PostgresDBConnection.getConnection());
+			StudentsRepository repS = new StudentsRepository();
+			repS.setConnection(PostgresDBConnection.getConnection());
+			repS.addPerson(teacher);
 		}
 	}
 

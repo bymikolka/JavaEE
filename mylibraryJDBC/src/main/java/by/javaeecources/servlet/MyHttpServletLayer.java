@@ -1,8 +1,6 @@
 package by.javaeecources.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import by.javaeecources.db.ConnectionContext;
 import by.javaeecources.entities.Person;
 import by.javaeecources.entities.UserAccount;
-import by.javaeecources.exceptions.PersonNotFoundException;
 import by.javaeecources.interfaces.IPerson;
 import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonRepository;
@@ -46,7 +43,8 @@ public class MyHttpServletLayer extends HttpServlet {
 		long idPerson = Long.parseLong(req.getParameter(MyHttpServletLayer.IDPERSON));
 		IPerson person = null;
 		try {
-			person = repository.getPersonById(ConnectionContext.getStoredConnection(req), idPerson);
+			repository.setConnection(ConnectionContext.getStoredConnection(req));
+			person = repository.getPersonById(idPerson);
 		} catch (Exception ex) {
 			System.err.println(" Error on searchPersonById " + ex.getMessage());
 		}
@@ -58,7 +56,8 @@ public class MyHttpServletLayer extends HttpServlet {
 	protected void searchPersonByName(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String personName = req.getParameter("personName");
-		List<IPerson> result = repository.searchPersonByName(ConnectionContext.getStoredConnection(req),personName);
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
+		List<IPerson> result = repository.searchPersonByName(personName);
 		forwardList(req, resp, result);
 	}
 
@@ -81,7 +80,8 @@ public class MyHttpServletLayer extends HttpServlet {
 
 		IPerson person = new Person(idPerson, firstname, lastname, username, role, description, email);
 		person.setId(idPerson);
-		boolean success = repository.updatePerson(person, ConnectionContext.getStoredConnection(req));
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
+		boolean success = repository.updatePerson(person);
 		String message = null;
 		if (success) {
 			message = "The Person has been successfully updated.";
@@ -101,12 +101,12 @@ public class MyHttpServletLayer extends HttpServlet {
 		String description = req.getParameter("description");
 		String email = req.getParameter("email");
 		Long repRole = (Long) getServletContext().getAttribute("role");
-		Connection conn = ConnectionContext.getStoredConnection(req);
-		repository = PersonRepository.getRepository(repRole, conn);
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
+		repository = PersonRepository.getRepository(repRole);
 		//Long id = repository.getNewId(); // it's not a great idea, but w/o DB it works
 		IPerson person = new Person(0L, firstname, lastname, username, role, description, email);
 
-		long idPerson = repository.addPerson(person, ConnectionContext.getStoredConnection(req));
+		long idPerson = repository.addPerson(person);
 		List<IPerson> personList = this.paginatedResult(req);
 		req.setAttribute(MyHttpServletLayer.IDPERSON, idPerson);
 		String message = "The new Person has been successfully created.";
@@ -119,7 +119,8 @@ public class MyHttpServletLayer extends HttpServlet {
 	protected void removePersonByName(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		long idPerson = Integer.valueOf(req.getParameter(MyHttpServletLayer.IDPERSON));
-		boolean confirm = repository.deletePerson(ConnectionContext.getStoredConnection(req), idPerson);
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
+		boolean confirm = repository.deletePerson(idPerson);
 		if (confirm) {
 			String message = "The Person has been successfully removed.";
 			req.setAttribute(MyHttpServletLayer.MESSAGETEXT, message);
@@ -175,8 +176,9 @@ public class MyHttpServletLayer extends HttpServlet {
 		} catch (Exception e) {
 			//
 		}
-		List<IPerson> result = repository.getAllPersonsParts(ConnectionContext.getStoredConnection(req), repository.getRole(), recordsPerPage, currentPage);
-		int rows = repository.getAllPersonsCount(ConnectionContext.getStoredConnection(req));
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
+		List<IPerson> result = repository.getAllPersonsParts(repository.getRole(), recordsPerPage, currentPage);
+		int rows = repository.getAllPersonsCount();
 
 		int nOfPages = rows / recordsPerPage;
 		if (nOfPages % recordsPerPage > 0 && (nOfPages * recordsPerPage != rows)) {
