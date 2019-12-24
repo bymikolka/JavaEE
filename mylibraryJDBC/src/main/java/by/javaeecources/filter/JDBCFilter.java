@@ -70,7 +70,6 @@ public class JDBCFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-
 		HttpServletRequest req = (HttpServletRequest) request;
 
 		// Only open connections for the special requests.

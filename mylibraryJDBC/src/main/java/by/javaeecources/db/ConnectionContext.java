@@ -27,6 +27,7 @@ public class ConnectionContext {
 	// Get the Connection object has been stored in attribute of the request.
 	public static Connection getStoredConnection(ServletRequest request) {
 		return (Connection) request.getAttribute(ATT_NAME_CONNECTION);
+		//return (Connection) request.getServletContext().getAttribute("DBManager");
 	}
 
 	// Store user info in Session.
