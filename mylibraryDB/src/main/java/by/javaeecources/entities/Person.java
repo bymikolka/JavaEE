@@ -3,6 +3,8 @@ package by.javaeecources.entities;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,14 +12,23 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import by.javaeecources.interfaces.IPerson;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @Entity(name = "person")
+@DynamicInsert
 @ToString
+@DiscriminatorColumn(
+	    name="dtype",
+	    discriminatorType=DiscriminatorType.STRING
+	)
 public class Person implements IPerson, Serializable{
+
+	
 	private static final long serialVersionUID = 1L;
 	@NotNull
 	@Column(nullable = false)
@@ -37,6 +48,10 @@ public class Person implements IPerson, Serializable{
 	@NotNull
 	@Column(nullable = false)
 	private Long role = 0L;
+	@Column(nullable = false, insertable = false, updatable = false)
+	private String dtype;
+
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
@@ -51,14 +66,17 @@ public class Person implements IPerson, Serializable{
 		return serialVersionUID;
 	}
 
+	@Override
 	public String getFirstname() {
 		return firstname;
 	}
 
+	@Override
 	public String getLastname() {
 		return lastname;
 	}
 
+	@Override
 	public String getEmail() {
 		return email;
 	}
@@ -116,26 +134,32 @@ public class Person implements IPerson, Serializable{
 		this.id = id;
 	}
 
+	@Override
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	@Override
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
 
+	@Override
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	@Override
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	@Override
 	public void setRole(Long role) {
 		this.role = role;
 	}

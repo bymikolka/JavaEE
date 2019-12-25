@@ -19,27 +19,9 @@ CREATE DATABASE library
     
  -- Table: public.person
 
+-- Table: public.person
+
 DROP TABLE public.person;
-
-CREATE TABLE public.person
-(
-    id integer NOT NULL DEFAULT nextval('person_id_seq'::regclass),
-    username text NOT NULL,
-    lastname text NOT NULL,
-    firstname text NOT NULL,
-    description text NOT NULL,
-    email text NOT NULL,
-    role numeric NOT NULL,
-	"DTYPE" text NOT NULL,
-    CONSTRAINT "personPK" PRIMARY KEY (id)
-);
-
-ALTER TABLE public.person
-    OWNER to myuser;
-    
--- SEQUENCE: public.person_id_seq
-
--- DROP SEQUENCE public.person_id_seq;
 
 CREATE SEQUENCE public.person_id_seq
     INCREMENT 1
@@ -47,6 +29,27 @@ CREATE SEQUENCE public.person_id_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
+
+
+CREATE TABLE public.person
+(
+    id integer NOT NULL DEFAULT nextval('person_id_seq'::regclass),
+    username text COLLATE pg_catalog."default" NOT NULL,
+    lastname text COLLATE pg_catalog."default" NOT NULL,
+    firstname text COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default" NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    role numeric NOT NULL,
+    DTYPE text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "personPK" PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.person
+    OWNER to myuser;
 
 ALTER SEQUENCE public.person_id_seq
     OWNER TO myuser;   

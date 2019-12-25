@@ -101,8 +101,8 @@ public class MyHttpServletLayer extends HttpServlet {
 		String description = req.getParameter("description");
 		String email = req.getParameter("email");
 		Long repRole = (Long) getServletContext().getAttribute("role");
-		repository.setConnection(ConnectionContext.getStoredConnection(req));
 		repository = PersonRepository.getRepository(repRole);
+		repository.setConnection(ConnectionContext.getStoredConnection(req));
 		//Long id = repository.getNewId(); // it's not a great idea, but w/o DB it works
 		IPerson person = new Person(0L, firstname, lastname, username, role, description, email);
 

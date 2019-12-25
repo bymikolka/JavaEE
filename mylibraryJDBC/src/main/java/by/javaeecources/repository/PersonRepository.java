@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import by.javaeecources.entities.Person;
 import by.javaeecources.exceptions.PersonNotFoundException;
@@ -153,35 +154,24 @@ public abstract class PersonRepository implements IPersonRepository {
 
 	@Override
 	public Long addPerson(IPerson person) {
+		List<Field> fields = Arrays.asList(person.getClass().getDeclaredFields());
+
+		String fieldEntity = fields.stream()
+				.map(field -> {field.setAccessible(true); return field;})
+				.filter(field -> field.getAnnotation(Col.class) != null)
+				.filter(field -> !field.getName().equals("id"))
+				.map(Field::getName)
+				.collect(Collectors.joining(", "));
+
+		String fieldQ = fieldEntity.replaceAll("\\w+", "?");
+		StringBuilder sql = new StringBuilder("INSERT INTO ").append(person.getClass().getSimpleName());
+		sql.append("(").append(fieldEntity).append(")");
+		sql.append(" VALUES ");
+		sql.append(" (").append(fieldQ).append(") ");
 		
-		/*List<Field> fields = Arrays.asList(person.getClass().getDeclaredFields());
-	    for(Field field: fields) {
-	        field.setAccessible(true);
-	    }
-		 StringBuilder sql = new StringBuilder("INSERT INTO person");
-		    sql.append("(");
-		    
-		    ArrayList<String> fieldEntity = new ArrayList<>();
-		    ArrayList<String> fieldQ = new ArrayList<>();
-	        for(Field field: fields) {
-	        	Col col = field.getAnnotation(Col.class);
-	        	if(col!=null && !field.getName().equals("id")) {
-		        	String name = field.getName();
-		        	fieldEntity.add(name);
-		        	fieldQ.add("?");
-	        	}
-	        }
-	        sql.append(String.join(",", fieldEntity));
-	        sql.append(")");
-	        sql.append(" VALUES ");
-	        sql.append(" (");
-	        sql.append(String.join(",", fieldQ));
-	        sql.append(") ");
-	        
-	        
-	    System.out.println(sql.toString());*/
-	    String s = "INSERT INTO person(username, lastname, firstname, description, email, role, \"DTYPE\") VALUES  (?, ?, ?, ?, ?, ?, ?) ";
-		try (PreparedStatement statement = connection.prepareStatement(s, Statement.RETURN_GENERATED_KEYS)){
+		
+	    //String s = "INSERT INTO person(username, lastname, firstname, description, email, role, \"DTYPE\") VALUES  (?, ?, ?, ?, ?, ?, ?) ";
+		try (PreparedStatement statement = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS)){
 
 			//??????
 			
@@ -266,6 +256,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	public List<IPerson> searchPersonByName(String searchParam) {
 
 		String sql = "SELECT * FROM person WHERE firstname like ? or lastname like ?";
+		
 		List<Field> fields = Arrays.asList(Person.class.getDeclaredFields());
 	    for(Field field: fields) {
 	        field.setAccessible(true);
@@ -307,7 +298,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	public IPerson getPersonById(Long id) throws PersonNotFoundException {
 		
 		
-		String sql = "SELECT id, username, lastname, firstname, description, email, role, \"DTYPE\" FROM person WHERE id = ? ";
+		String sql = "SELECT id, username, lastname, firstname, description, email, role, DTYPE FROM person WHERE id = ? ";
 		
 		
 		List<Field> fields = Arrays.asList(Person.class.getDeclaredFields());

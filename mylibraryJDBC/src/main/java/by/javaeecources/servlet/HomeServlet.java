@@ -1,7 +1,6 @@
 package by.javaeecources.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,6 @@ public class HomeServlet extends MyHttpServletLayer {
 		String action = req.getParameter("searchAction");
 		Long role = getRole(req);
 		getServletContext().setAttribute("role", role);
-		Connection conn = ConnectionContext.getStoredConnection(req);
 		if (action != null) {
 			switch (action) {
 			case "searchById":

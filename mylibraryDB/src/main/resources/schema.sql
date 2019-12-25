@@ -36,16 +36,6 @@ CREATE TABLE public.person
 ALTER TABLE public.person
     OWNER to myuser;
     
-CREATE TABLE public.users
-(
-    id serial NOT NULL,
-    username text NOT NULL,
-    password text NOT NULL,
-    "group" numeric(2) NOT NULL,
-    PRIMARY KEY (id, username)
-);
-
-
  -- Table: public.person
 
 --DROP TABLE public.users;
@@ -58,7 +48,8 @@ CREATE TABLE public.users
     "group" numeric(2) NOT NULL,
     PRIMARY KEY (id, username)
 );
-
+ALTER TABLE public.person
+    ADD COLUMN "DTYPE" text NOT NULL;
 
 ALTER TABLE public.users
     OWNER to myuser;

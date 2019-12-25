@@ -36,6 +36,11 @@ public abstract class PersonRepository implements IPersonRepository {
 		return emFactory.createEntityManager();
 	}
 
+	@Override
+	public List<IPerson> getPersonList() {
+		return personList;
+	}
+
 	private List<IPerson> personList = null;
 
 	static Map<Long, IPersonRepository> map = null;
@@ -88,13 +93,10 @@ public abstract class PersonRepository implements IPersonRepository {
 		Query query = getEntityManager().createQuery("from person where role = :role order by id", IPerson.class);
 		query.setFirstResult(offset);
 		query.setMaxResults(limit);
-		
+
 		query.setParameter("role", role);
 		return query.getResultList();
-		
-		
-		
-		
+
 //		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), recordsPerPage);
 //		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(currentPage - 1)); // by the reason of array index always
 //																					// starts with 0
@@ -112,11 +114,12 @@ public abstract class PersonRepository implements IPersonRepository {
 					.orElseThrow(Exception::new);
 			return person.getId() + 1;
 		} catch (Exception e) {
-			return new Long(1);
+			return 1L;
 		}
 	}
 
-	public static Long addPerson(IPerson person) {
+	@Override
+	public Long addPerson(IPerson person) {
 		EntityManager em = getEntityManager();
 		em.getTransaction().begin();
 

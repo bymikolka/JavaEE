@@ -10,9 +10,9 @@
 		<filter-name>jdbcFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<listener>
+	<!-- listener>
     	<listener-class>by.javaeecources.listener.AppContextListener</listener-class>
-  	</listener>
+  	</listener-->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
