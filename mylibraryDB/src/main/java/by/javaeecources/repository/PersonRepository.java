@@ -51,7 +51,6 @@ public abstract class PersonRepository implements IPersonRepository {
 		if (map == null) {
 			map = new HashMap<>();
 		}
-		;
 		if (map.get(role) != null) {
 			return map.get(role);
 		}
@@ -209,13 +208,16 @@ public abstract class PersonRepository implements IPersonRepository {
 
 	@Override
 	public IPerson getPersonById(Long id) throws PersonNotFoundException {
-		Query query = getEntityManager().createQuery("from person WHERE id = :id", IPerson.class);
+		return getEntityManager().find(Person.class, id);
+		
+		
+		/*Query query = getEntityManager().createQuery("from person WHERE id = :id", IPerson.class);
 		query.setParameter("id", id);
 		if (query.getResultList() == null || query.getResultList().isEmpty()) {
 			return null;
 		} else {
 			return (IPerson) query.getResultList().get(0);
-		}
+		}*/
 //		Optional<IPerson> match = personList.stream().filter(e -> e.getId().longValue() == id.longValue()).findFirst();
 //		if (match.isPresent()) {
 //			return match.get();

@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-
-import lombok.Data;
-@Data
 @Entity(name = "users")
 public class UserAccount implements Serializable{
 

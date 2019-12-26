@@ -10,9 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import by.javaeecources.entities.UserAccount;
 import by.javaeecources.repository.UserAccountRepository;
-import lombok.Data;
 
-@Data
 @WebServlet(urlPatterns = { "/login" })
 public class LoginServlet extends MyHttpServletLayer{
 

@@ -15,13 +15,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 
 import by.javaeecources.interfaces.IPerson;
-import lombok.Data;
-import lombok.ToString;
 
-@Data
 @Entity(name = "person")
 @DynamicInsert
-@ToString
 @DiscriminatorColumn(
 	    name="dtype",
 	    discriminatorType=DiscriminatorType.STRING
