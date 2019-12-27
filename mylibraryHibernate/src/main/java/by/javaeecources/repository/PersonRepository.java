@@ -72,8 +72,7 @@ public abstract class PersonRepository implements IPersonRepository {
 		Transaction transaction;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-			Query<Person> query = session.createNativeQuery("from Person WHERE role = :role order by id;",
-					Person.class);
+			Query<Person> query = session.createQuery("from Person WHERE role = :role order by id;", Person.class);
 			query.setParameter("role", this.getRole());
 			List<IPerson> iPersons = new LinkedList<>();
 			iPersons.addAll(query.getResultList());
