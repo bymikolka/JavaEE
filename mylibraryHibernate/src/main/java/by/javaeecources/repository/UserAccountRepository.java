@@ -1,7 +1,5 @@
 package by.javaeecources.repository;
 
-import java.util.List;
-
 import javax.persistence.Query;
 
 import org.hibernate.Session;
@@ -9,7 +7,6 @@ import org.hibernate.Transaction;
 
 import by.javaeecources.db.ConnectionManager;
 import by.javaeecources.entities.UserAccount;
-import by.javaeecources.interfaces.IPerson;
 
 public class UserAccountRepository {
 	private UserAccountRepository() {
@@ -19,10 +16,9 @@ public class UserAccountRepository {
 	public static UserAccount findUser(UserAccount user) {
 		
 		Transaction transaction = null;
-		List<IPerson> list = null;
 	try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 		transaction = session.beginTransaction();
-		Query query = session.createQuery("from users WHERE username = :name", UserAccount.class);
+		Query query = session.createQuery("from UserAccount WHERE username = :name", UserAccount.class);
 		query.setParameter("name", user.getUsername());
 		
 		if(query.getResultList()==null || query.getResultList().isEmpty()) {
@@ -36,9 +32,6 @@ public class UserAccountRepository {
 		 return null;
 		
 	} catch (Exception e) {
-        if (transaction != null) {
-            transaction.rollback();
-        }
         e.printStackTrace();
     }
 		return null;

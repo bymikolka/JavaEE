@@ -27,7 +27,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	public PersonRepository() {
 	}
 
-	//private static final EntityManagerFactory emFactory;
+	// private static final EntityManagerFactory emFactory;
 //	static {
 //		emFactory = Persistence.createEntityManagerFactory("by.javaeecources");
 //	}
@@ -38,6 +38,9 @@ public abstract class PersonRepository implements IPersonRepository {
 
 	@Override
 	public List<IPerson> getPersonList() {
+		if (personList == null) {
+			personList = new LinkedList<IPerson>();
+		}
 		return personList;
 	}
 
@@ -69,14 +72,15 @@ public abstract class PersonRepository implements IPersonRepository {
 		Transaction transaction;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-			Query<Person> query = session.createQuery("from Person WHERE role = ?rol order by id", Person.class);
+			Query<Person> query = session.createNativeQuery("from Person WHERE role = :role order by id;",
+					Person.class);
+			query.setParameter("role", this.getRole());
 			List<IPerson> iPersons = new LinkedList<>();
 			iPersons.addAll(query.getResultList());
 			transaction.commit();
-			query.setParameter("rol", this.getRole());
 			return iPersons;
-        }
-		
+		}
+
 //		Query query = getEntityManager().createQuery("from person WHERE role = :role order by id", IPerson.class);
 //		query.setParameter("role", this.getRole());
 //		return query.getResultList();
@@ -84,7 +88,15 @@ public abstract class PersonRepository implements IPersonRepository {
 
 	@Override
 	public int getAllPersonsCount() {
-		return this.getAllPersons().size();
+		Transaction transaction;
+		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
+			transaction = session.beginTransaction();
+			int count = (int)((long) session.createQuery("select count(p.id) from Person p where role=:pRole")
+					.setParameter("pRole", this.getRole())
+					.uniqueResult());
+			transaction.commit();
+			return count;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,28 +113,27 @@ public abstract class PersonRepository implements IPersonRepository {
 		}
 		Transaction transaction = null;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
-			
-			List<IPerson> list = new ArrayList<>();
+
 			transaction = session.beginTransaction();
-			//Query query = getEntityManager().createQuery("from person where role = :role order by id", IPerson.class);
-			Query<Person> query = session.createNativeQuery("from person where role = ?role order by id", Person.class);
+			// Query query = getEntityManager().createQuery("from person where role = :role
+			// order by id", IPerson.class);
+			Query<Person> query = session.createQuery("from Person where role = :role order by id", Person.class);
 			query.setFirstResult(offset);
 			query.setMaxResults(limit);
-
 			query.setParameter("role", role);
-			List<IPerson> iPersons = new LinkedList<>();
+			List<IPerson> iPersons = new LinkedList<IPerson>();
 			iPersons.addAll(query.getResultList());
 			transaction.commit();
+			session.close();
 			return iPersons;
-			
+
 		} catch (Exception e) {
 //            if (transaction != null) {
 //                transaction.rollback();
 //            }
-            e.printStackTrace();
-        }		
+			e.printStackTrace();
+		}
 		return null;
-		
 
 //		Map<Object, Object> getAllPersonsParts = getAllParts(this.getAllPersons(), recordsPerPage);
 //		return (List<IPerson>) getAllPersonsParts.get(Integer.valueOf(currentPage - 1)); // by the reason of array index always
@@ -151,25 +162,22 @@ public abstract class PersonRepository implements IPersonRepository {
 		Long id = 0L;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-            id = (Long) session.save(person);
-            transaction.commit();
+			id = (Long) session.save(person);
+			transaction.commit();
 		} catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-		return id; 
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+		return id;
 
-		
-		
-		/*EntityManager em = getEntityManager();
-		em.getTransaction().begin();
-
-		em.merge(person);
-		em.getTransaction().commit();
-		em.clear();
-		return person.getId();*/
+		/*
+		 * EntityManager em = getEntityManager(); em.getTransaction().begin();
+		 * 
+		 * em.merge(person); em.getTransaction().commit(); em.clear(); return
+		 * person.getId();
+		 */
 	}
 
 	@Override
@@ -184,14 +192,12 @@ public abstract class PersonRepository implements IPersonRepository {
 					session.update(pDB);
 					transaction.commit();
 				} catch (Exception e) {
-		            if (transaction != null) {
-		                transaction.rollback();
-		            }
-		            e.printStackTrace();
-		        }
+					if (transaction != null) {
+						transaction.rollback();
+					}
+					e.printStackTrace();
+				}
 
-				
-				
 //				EntityManager em = getEntityManager();
 //				em.getTransaction().begin();
 //				pDB.cloneObj(person);
@@ -229,12 +235,12 @@ public abstract class PersonRepository implements IPersonRepository {
 					session.delete(pDB);
 					transaction.commit();
 				} catch (Exception e) {
-		            if (transaction != null) {
-		                transaction.rollback();
-		            }
-		            e.printStackTrace();
-		        }
-				
+					if (transaction != null) {
+						transaction.rollback();
+					}
+					e.printStackTrace();
+				}
+
 //				EntityManager em = getEntityManager();
 //				em.getTransaction().begin();
 //
@@ -255,8 +261,8 @@ public abstract class PersonRepository implements IPersonRepository {
 	public List<IPerson> searchPersonByName(String searchParam) {
 		// String sql = "from person WHERE (firstname like %:name or lastname like
 		// %:name)";
-			Transaction transaction = null;
-			List<IPerson> list = null;
+		Transaction transaction = null;
+		List<IPerson> list = null;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 
@@ -265,17 +271,17 @@ public abstract class PersonRepository implements IPersonRepository {
 			Root<Person> person = query.from(Person.class);
 			query.where(cb.like(person.get("firstname"), "%" + searchParam + "%"));
 			TypedQuery<Person> typedQuery = session.createQuery(query);
-			list = new ArrayList<>(); //List<Person> -> List<IPerson> ??
+			list = new ArrayList<>(); // List<Person> -> List<IPerson> ??
 			list.addAll(typedQuery.getResultList());
 			transaction.commit();
 		} catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
 		return list;
-		
+
 //		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 //		CriteriaQuery<Person> query = cb.createQuery(Person.class);
 //		Root<Person> person = query.from(Person.class);
@@ -302,27 +308,25 @@ public abstract class PersonRepository implements IPersonRepository {
 	public IPerson getPersonById(Long id) throws PersonNotFoundException {
 		Transaction transaction = null;
 		IPerson iPerson = null;
-		
+
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            iPerson = session.get(Person.class, id);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
+			transaction = session.beginTransaction();
+			iPerson = session.get(Person.class, id);
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
 		return iPerson;
-		
-		
-		/*Query query = getEntityManager().createQuery("from person WHERE id = :id", IPerson.class);
-		query.setParameter("id", id);
-		if (query.getResultList() == null || query.getResultList().isEmpty()) {
-			return null;
-		} else {
-			return (IPerson) query.getResultList().get(0);
-		}*/
+
+		/*
+		 * Query query = getEntityManager().createQuery("from person WHERE id = :id",
+		 * IPerson.class); query.setParameter("id", id); if (query.getResultList() ==
+		 * null || query.getResultList().isEmpty()) { return null; } else { return
+		 * (IPerson) query.getResultList().get(0); }
+		 */
 //		Optional<IPerson> match = personList.stream().filter(e -> e.getId().longValue() == id.longValue()).findFirst();
 //		if (match.isPresent()) {
 //			return match.get();

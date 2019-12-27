@@ -13,6 +13,7 @@ public class ConnectionManager {
                 Configuration configuration = new Configuration();
                 configuration.configure("/by/javaeecources/db/hibernate.cfg.xml");
                 configuration.addAnnotatedClass(by.javaeecources.entities.Person.class);
+                configuration.addAnnotatedClass(by.javaeecources.entities.UserAccount.class);
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);

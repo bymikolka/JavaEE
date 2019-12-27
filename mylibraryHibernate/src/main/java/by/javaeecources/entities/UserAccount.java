@@ -7,22 +7,25 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class UserAccount implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@NotNull
-	@Column(nullable = false)
+	@Column(name="username", nullable = false)
 	private String username;
 	@NotNull
-	@Column(nullable = false)
+	@Column(name="password", nullable = false)
 	private String password;
 	@NotNull
-	@Column(nullable = false)
+	@Column(name="group", nullable = false)
 	private String group;
 	@Id
 	@GeneratedValue
+	@Column(name="id")
 	private Long id = 0L;
 	
 	
