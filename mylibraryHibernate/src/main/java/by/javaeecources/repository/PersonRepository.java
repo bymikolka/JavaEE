@@ -12,6 +12,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -24,6 +26,7 @@ import by.javaeecources.interfaces.IPersonRepository;
 import by.javaeecources.repository.PersonFactory.PersonRole;
 
 public abstract class PersonRepository implements IPersonRepository {
+	private static final Logger logger = LogManager.getLogger(PersonRepository.class);
 	public PersonRepository() {
 	}
 
@@ -39,7 +42,7 @@ public abstract class PersonRepository implements IPersonRepository {
 	@Override
 	public List<IPerson> getPersonList() {
 		if (personList == null) {
-			personList = new LinkedList<IPerson>();
+			personList = new LinkedList<>();
 		}
 		return personList;
 	}
@@ -64,19 +67,21 @@ public abstract class PersonRepository implements IPersonRepository {
 			personRepository = new TeachersRepository();
 		}
 		map.put(role, personRepository);
+		logger.info("getRepository created.");
 		return personRepository;
-	};
+	}
 
 	@Override
 	public List<IPerson> getAllPersons() {
 		Transaction transaction;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-			Query<Person> query = session.createQuery("from Person WHERE role = :role order by id;", Person.class);
+			Query<Person> query = session.createQuery("from Person WHERE role = :role order by id", Person.class);
 			query.setParameter("role", this.getRole());
 			List<IPerson> iPersons = new LinkedList<>();
 			iPersons.addAll(query.getResultList());
 			transaction.commit();
+			logger.info("getAllPersons executed.");
 			return iPersons;
 		}
 
@@ -98,7 +103,6 @@ public abstract class PersonRepository implements IPersonRepository {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<IPerson> getAllPersonsParts(Long role, int recordsPerPage, int currentPage) {
 		int start = currentPage * recordsPerPage - recordsPerPage;
@@ -110,6 +114,7 @@ public abstract class PersonRepository implements IPersonRepository {
 		} else {
 			offset = 0;
 		}
+		logger.warn("getAllPersonsParts {}, {}, {}", role, recordsPerPage, currentPage);
 		Transaction transaction = null;
 		try (Session session = ConnectionManager.getSessionFactory().openSession()) {
 
@@ -120,17 +125,18 @@ public abstract class PersonRepository implements IPersonRepository {
 			query.setFirstResult(offset);
 			query.setMaxResults(limit);
 			query.setParameter("role", role);
-			List<IPerson> iPersons = new LinkedList<IPerson>();
+			List<IPerson> iPersons = new LinkedList<>();
 			iPersons.addAll(query.getResultList());
 			transaction.commit();
 			session.close();
+			logger.info("getAllPersonsParts {} {} {}", role, recordsPerPage, currentPage);
 			return iPersons;
 
 		} catch (Exception e) {
 //            if (transaction != null) {
 //                transaction.rollback();
 //            }
-			e.printStackTrace();
+			logger.error("getAllPersonsParts executed with error .", e);
 		}
 		return null;
 
@@ -163,11 +169,9 @@ public abstract class PersonRepository implements IPersonRepository {
 			transaction = session.beginTransaction();
 			id = (Long) session.save(person);
 			transaction.commit();
+			logger.info("addPerson added");
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			e.printStackTrace();
+			logger.error("addPerson executed with error .", e);
 		}
 		return id;
 
@@ -194,7 +198,7 @@ public abstract class PersonRepository implements IPersonRepository {
 					if (transaction != null) {
 						transaction.rollback();
 					}
-					e.printStackTrace();
+					logger.error("updatePerson executed with error .", e);
 				}
 
 //				EntityManager em = getEntityManager();
@@ -206,6 +210,7 @@ public abstract class PersonRepository implements IPersonRepository {
 				return true;
 			}
 		} catch (PersonNotFoundException e) {
+			logger.error("updatePerson executed with PersonNotFoundException .", e);
 			return false;
 		}
 		return false;
@@ -237,7 +242,7 @@ public abstract class PersonRepository implements IPersonRepository {
 					if (transaction != null) {
 						transaction.rollback();
 					}
-					e.printStackTrace();
+					logger.error("deletePerson executed with error ", e);
 				}
 
 //				EntityManager em = getEntityManager();
@@ -273,11 +278,12 @@ public abstract class PersonRepository implements IPersonRepository {
 			list = new ArrayList<>(); // List<Person> -> List<IPerson> ??
 			list.addAll(typedQuery.getResultList());
 			transaction.commit();
+			logger.info("searchPersonByName executed with {}", searchParam);
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			e.printStackTrace();
+			logger.error("searchPersonByName executed with error with "+searchParam, e);
 		}
 		return list;
 
@@ -316,7 +322,7 @@ public abstract class PersonRepository implements IPersonRepository {
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			e.printStackTrace();
+			logger.error("getPersonById executed with error with id"+id, e);
 		}
 		return iPerson;
 

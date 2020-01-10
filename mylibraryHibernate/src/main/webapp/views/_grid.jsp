@@ -39,11 +39,11 @@
 	<c:set var="role" value="<%=getServletContext().getAttribute(\"role\")%>" />
 
 <div class="text-left">
-	<c:if test="${editor == true}">
+	<!-- c:if test="${editor == true}"-->
 		<form action="${pageContext.request.contextPath}/create">
 			<button type="submit" class="btn btn-primary btn-md">New person</button>
 		</form>
-	</c:if>
+	<!--/c:if-->
 </div>
 <form action="/" method="post" id="personForm" role="form">
 	<input type="hidden" id="action" name="action" value="${action}" />

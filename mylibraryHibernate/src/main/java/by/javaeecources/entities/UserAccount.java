@@ -23,6 +23,10 @@ public class UserAccount implements Serializable{
 	@NotNull
 	@Column(name="group", nullable = false)
 	private String group;
+	public String getGroup() {
+		return group;
+	}
+
 	@Id
 	@GeneratedValue
 	@Column(name="id")

@@ -1,11 +1,17 @@
 package by.javaeecources.db;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-
 public class ConnectionManager {
+	
+	
+	private static final Logger logger = LogManager.getLogger();
+	
 	private static SessionFactory sessionFactory;
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
@@ -19,7 +25,7 @@ public class ConnectionManager {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
                 
             } catch (Exception e) {
-                e.printStackTrace();
+            	logger.error("Error message on getting session factory", e);
             }
         }
         return sessionFactory;

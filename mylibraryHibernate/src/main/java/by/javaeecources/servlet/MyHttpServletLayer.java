@@ -24,7 +24,7 @@ public class MyHttpServletLayer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected static final String HOMEVIEW = "/views/homeView.jsp";
 	protected static final String NEWPERSON = "/views/newPerson.jsp";
-	protected static final String LOGINVIEW = "/views/loginView.jsp";
+	public static final String LOGINVIEW = "/views/loginView.jsp";
 
 	IPersonRepository  repository = null;
 
@@ -137,6 +137,11 @@ public class MyHttpServletLayer extends HttpServlet {
 		session.setAttribute(MyHttpServletLayer.LOGINEDUSER, loginedUser);
 	}
 
+	public static UserAccount getLoginedUser(HttpSession session) {
+		return (UserAccount) session.getAttribute(MyHttpServletLayer.LOGINEDUSER);
+	}
+
+	
 	protected void logout(HttpServletRequest req, HttpServletResponse resp) {
 		resp.setContentType("text/html");
 		Cookie[] cookies = req.getCookies();
