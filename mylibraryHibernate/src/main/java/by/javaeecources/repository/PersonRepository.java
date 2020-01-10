@@ -279,6 +279,7 @@ public abstract class PersonRepository implements IPersonRepository {
 			list.addAll(typedQuery.getResultList());
 			transaction.commit();
 			logger.info("searchPersonByName executed with {}", searchParam);
+			logger.warn("warn searchPersonByName executed with {}", searchParam);
 		} catch (Exception e) {
 			logger.error("searchPersonByName executed with error with "+searchParam, e);
 		}

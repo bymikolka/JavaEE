@@ -10,11 +10,18 @@ import org.hibernate.service.ServiceRegistry;
 public class ConnectionManager {
 	
 	
-	private static final Logger logger = LogManager.getLogger();
-	
+	static Logger logger = LogManager.getLogger(ConnectionManager.class);
+	static {
+		System.setProperty("log4j.configurationFile","/src/main/resources/log4j2.xml");
+		
+//		String log4jConfigFile = System.getProperty("log4j.configurationFile");
+//        DOMConfigurator.configure(ConnectionManager.class.getResource("log4j2.xml").toURI() + log4jConfigFile);
+//		
+	}
 	private static SessionFactory sessionFactory;
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
+    	
+    	if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
                 configuration.configure("/by/javaeecources/db/hibernate.cfg.xml");
@@ -23,7 +30,8 @@ public class ConnectionManager {
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-                
+                logger.info("!!!---!!!");
+       
             } catch (Exception e) {
             	logger.error("Error message on getting session factory", e);
             }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import by.javaeecources.db.ConnectionManager;
 import by.javaeecources.entities.UserAccount;
 import by.javaeecources.interfaces.IPersonRepository;
+import by.javaeecources.repository.UserAccountRepository;
 @TestMethodOrder(OrderAnnotation.class)
 class UserRepositoryTest {
 
