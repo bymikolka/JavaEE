@@ -280,9 +280,6 @@ public abstract class PersonRepository implements IPersonRepository {
 			transaction.commit();
 			logger.info("searchPersonByName executed with {}", searchParam);
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
 			logger.error("searchPersonByName executed with error with "+searchParam, e);
 		}
 		return list;
@@ -319,9 +316,6 @@ public abstract class PersonRepository implements IPersonRepository {
 			iPerson = session.get(Person.class, id);
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
 			logger.error("getPersonById executed with error with id"+id, e);
 		}
 		return iPerson;

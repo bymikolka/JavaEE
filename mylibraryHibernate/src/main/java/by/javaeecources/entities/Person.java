@@ -65,10 +65,6 @@ public class Person implements IPerson, Serializable{
 		// Auto-generated constructor stub
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public String getFirstname() {
 		return firstname;
