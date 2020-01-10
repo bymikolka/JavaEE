@@ -74,4 +74,10 @@ public class UserAccount implements Serializable{
 		return true;
 		//return "1".equals(this.getGroup());
 	}
+
+	@Override
+	public String toString() {
+		return "UserAccount [username=" + username + ", password=" + password + ", group=" + group + ", id=" + id + "]";
+	}
+	
 }

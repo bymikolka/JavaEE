@@ -10,7 +10,12 @@ import org.hibernate.service.ServiceRegistry;
 public class ConnectionManager {
 	
 	
-	static Logger logger = LogManager.getLogger(ConnectionManager.class);
+	
+	
+	private static final Logger logger = LogManager.getLogger(ConnectionManager.class);
+	public static Logger getLogger() {
+		return logger;
+	}
 	static {
 		System.setProperty("log4j.configurationFile","/src/main/resources/log4j2.xml");
 		

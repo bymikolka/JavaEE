@@ -22,7 +22,9 @@ public class UserAccountRepository {
 		query.setParameter("name", user.getUsername());
 		
 		if(query.getResultList()==null || query.getResultList().isEmpty()) {
+			ConnectionManager.getLogger().error("Autentification Failed!!! for {}", user.getUsername());
 			return null;
+			
 		}
 		UserAccount usrFromDB =  (UserAccount) (query.getResultList()).get(0);
 		if(usrFromDB!=null && usrFromDB.equals(user)) {
@@ -32,7 +34,7 @@ public class UserAccountRepository {
 		 return null;
 		
 	} catch (Exception e) {
-        e.printStackTrace();
+		ConnectionManager.getLogger().error("Autentification ERROOR!!! ", e);
     }
 		return null;
 		
