@@ -56,7 +56,7 @@
 						<th scope="col">Role</th>
 						<th scope="col">Full name</th>
 						<th scope="col">Description</th>
-						<th scope="col" >E-mail</th>
+						<th scope="col">E-mail</th>
 						<th scope="col">Username</th>
 						<th scope="col"></th>
 						<th scope="col"></th>

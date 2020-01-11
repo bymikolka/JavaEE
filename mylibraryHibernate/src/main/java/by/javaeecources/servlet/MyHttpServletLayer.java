@@ -22,7 +22,7 @@ public class MyHttpServletLayer extends HttpServlet {
 	private static final String MESSAGETEXT = "message";
 	private static final String LOGINEDUSER = "loginedUser";
 	private static final long serialVersionUID = 1L;
-	protected static final String HOMEVIEW = "/views/homeView.jsp";
+	public static final String HOMEVIEW = "/views/homeView.jsp";
 	protected static final String NEWPERSON = "/views/newPerson.jsp";
 	public static final String LOGINVIEW = "/views/loginView.jsp";
 

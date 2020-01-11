@@ -1,4 +1,4 @@
-package by.javaeecources.security;
+package by.javaeecources.filter;
 
 import java.io.IOException;
 
@@ -14,16 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import by.javaeecources.db.ConnectionManager;
 import by.javaeecources.servlet.MyHttpServletLayer;
 
-@WebFilter("/AuthenticationFilter")
-public class AuthenticationFilter implements Filter {
+@WebFilter("/LoginAttemptFilter")
+public class LoginAttemptFilter implements Filter {
 
 	private ServletContext context;
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
-		this.context = fConfig.getServletContext();
-		this.context.log("AuthenticationFilter initialized");
 	}
 
 	@Override
@@ -34,16 +33,17 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		String uri = req.getRequestURI();
-		this.context.log("Requested Resource::" + uri);
+		ConnectionManager.getLogger().info("Requested Resource:: {}", uri);
 
 		HttpSession session = req.getSession(false);
-		if (session!= null && MyHttpServletLayer.getLoginedUser(session) == null && uri.endsWith("/create")) {
-			this.context.log("Unauthorized access request");
-			res.sendRedirect(req.getContextPath()+MyHttpServletLayer.LOGINVIEW);
-		} else {
-			// pass the request along the filter chain
+		if (session!= null && MyHttpServletLayer.getLoginedUser(session) != null && uri.endsWith("/login")) {
+			ConnectionManager.getLogger().info("Successfully logined user!");
+			res.sendRedirect(req.getContextPath());
+		
+		}else {
+			ConnectionManager.getLogger().warn("Login attempt registred!");
+		} 
 			chain.doFilter(request, response);
-		}
 
 	}
 
