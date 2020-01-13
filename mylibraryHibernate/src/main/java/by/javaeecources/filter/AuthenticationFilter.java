@@ -14,12 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import by.javaeecources.db.ConnectionManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.javaeecources.servlet.MyHttpServletLayer;
 
 @WebFilter("/AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
+	private static final Logger logger = LogManager.getLogger(AuthenticationFilter.class);
+	
 	private ServletContext context;
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
@@ -35,11 +39,11 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		String uri = req.getRequestURI();
-		ConnectionManager.getLogger().info("AuthenticationFilter Requested Resource:: {}", uri);
+		logger.info("AuthenticationFilter Requested Resource:: {}", uri);
 
 		HttpSession session = req.getSession(false);
 		if (session!= null && MyHttpServletLayer.getLoginedUser(session) == null && uri.endsWith("/create")) {
-			ConnectionManager.getLogger().info("Unauthorized access request");
+			logger.info("Unauthorized access request");
 			res.sendRedirect(req.getContextPath()+MyHttpServletLayer.LOGINVIEW);
 		} else {
 			// pass the request along the filter chain
