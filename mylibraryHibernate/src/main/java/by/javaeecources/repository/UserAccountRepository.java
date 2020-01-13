@@ -2,8 +2,6 @@ package by.javaeecources.repository;
 
 import javax.persistence.Query;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -14,7 +12,6 @@ public class UserAccountRepository {
 	private UserAccountRepository() {
 		// Auto-generated constructor stub
 	}
-	private static final Logger logger = LogManager.getLogger(UserAccountRepository.class);
 	public static UserAccount findUser(UserAccount user) {
 		
 		Transaction transaction = null;
@@ -25,7 +22,7 @@ public class UserAccountRepository {
 		
 		if(query.getResultList()==null || query.getResultList().isEmpty()) {
 			
-			logger.error("Autentification Failed!!! for {}", user.getUsername());
+			ConnectionManager.getLogger().error("Autentification Failed!!! for {}", user.getUsername());
 			return null;
 			
 		}
@@ -37,7 +34,7 @@ public class UserAccountRepository {
 		 return null;
 		
 	} catch (Exception e) {
-		logger.error("Autentification ERROOR!!! ", e);
+		ConnectionManager.getLogger().error("Autentification ERROOR!!! ", e);
     }
 		return null;
 		

@@ -13,15 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import by.javaeecources.db.ConnectionManager;
 import by.javaeecources.servlet.MyHttpServletLayer;
 
 @WebFilter("/LoginAttemptFilter")
 public class LoginAttemptFilter implements Filter {
 
-	private static final Logger logger = LogManager.getLogger(LoginAttemptFilter.class);
 	
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
@@ -35,15 +32,15 @@ public class LoginAttemptFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		String uri = req.getRequestURI();
-		logger.info("Requested Resource:: {}", uri);
+		ConnectionManager.getLogger().info("Requested Resource:: {}", uri);
 
 		HttpSession session = req.getSession(false);
 		if (session!= null && MyHttpServletLayer.getLoginedUser(session) != null && uri.endsWith("/login")) {
-			logger.info("Successfully logined user!");
+			ConnectionManager.getLogger().info("Successfully logined user!");
 			res.sendRedirect(req.getContextPath());
 		
 		}else {
-			logger.warn("Login attempt registred!");
+			ConnectionManager.getLogger().warn("Login attempt registred!");
 		} 
 			chain.doFilter(request, response);
 
