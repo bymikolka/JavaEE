@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,6 @@ public class PersonService {
 	}
 	
 	
-	
 
 	public Person createOrUpdateBook(Person person) {
 		if(person.getId() == null) {
@@ -59,6 +59,11 @@ public class PersonService {
 			}
 			return repository.save(person);
 		}
+	}
+
+
+	public Page<Person> findAllPersonWithPagination(PageRequest pageable) {
+		return repository.findAllPersonWithPagination(pageable);
 	}
 
 	

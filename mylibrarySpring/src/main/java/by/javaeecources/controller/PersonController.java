@@ -69,27 +69,38 @@ public class PersonController {
 		return "redirect:/";
 	}
     
-//	@GetMapping("/search/persons")
-//	public String findPersonByFirstname(Model model, @ModelAttribute("person") PersonDto personDto, BindingResult result) {
-//		 ModelAndView mav = new ModelAndView("search");    
-//		List<Person> personsList = personService.findByFirstname(personDto.getFirstname());
-//		    model.addAttribute("personsList", personsList);
-//		    return "redirect:/";
-//		}
-	
-	@RequestMapping(value="/search/persons")
+	@GetMapping("/search/persons")
 	public ModelAndView findPersonByFirstname(@RequestParam("pageSize") Optional<Integer> pageSize, @RequestParam("page") Optional<Integer> page, @ModelAttribute("person") PersonDto personDto, BindingResult result) {
-	    ModelAndView modelAndView = new ModelAndView("index");
-        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+		ModelAndView modelAndView = new ModelAndView("index");
+		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
         int tempPageNumber = page.isPresent()?page.get()-1:1;
         int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : tempPageNumber;
-	    List<Person> personsList = personService.findByFirstname(personDto.getFirstname());
+
+		Page<Person> pages = personService.findAllPersonWithPagination(PageRequest.of(evalPage, evalPageSize));
+		PagerModel pager = new PagerModel(pages.getTotalPages(),pages.getNumber(),BUTTONS_TO_SHOW);
+		
+		
+		modelAndView.addObject("personsList",pages);
         modelAndView.addObject("selectedPageSize", evalPageSize);
         modelAndView.addObject("pageSizes", PAGE_SIZES);
-	    modelAndView.addObject("personsList", personsList);      
-
-	    return modelAndView;
-	}
+        modelAndView.addObject("pager", pager);
+        modelAndView.addObject("person", new Person()); 
+        return modelAndView;
+		}
+	
+//	@RequestMapping(value="/search/persons")
+//	public ModelAndView findPersonByFirstname(@RequestParam("pageSize") Optional<Integer> pageSize, @RequestParam("page") Optional<Integer> page, @ModelAttribute("person") PersonDto personDto, BindingResult result) {
+//	    ModelAndView modelAndView = new ModelAndView("index");
+//        int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
+//        int tempPageNumber = page.isPresent()?page.get()-1:1;
+//        int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : tempPageNumber;
+//	    List<Person> personsList = personService.findByFirstname(personDto.getFirstname());
+//        modelAndView.addObject("selectedPageSize", evalPageSize);
+//        modelAndView.addObject("pageSizes", PAGE_SIZES);
+//	    modelAndView.addObject("personsList", personsList);      
+//
+//	    return modelAndView;
+//	}
 	
 	
     @GetMapping(path = {"edit","/edit/{id}"})

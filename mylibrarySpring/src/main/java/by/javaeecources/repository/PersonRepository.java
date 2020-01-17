@@ -3,6 +3,9 @@ package by.javaeecources.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -17,5 +20,10 @@ public  interface PersonRepository extends CrudRepository<Person, Long>, PagingA
 	
 	List<Person> findByFirstnameAndLastname(String firstName, String lastName);
 	//Optional<Person> findFirst5ByFirstnameStartsWithOrderByFirstname(String firstName, String lastName);
+
+	
+	@Query(value = "SELECT u FROM Person u ORDER BY id")
+	Page<Person> findAllPersonWithPagination(Pageable pageable);
+
 	
 }
