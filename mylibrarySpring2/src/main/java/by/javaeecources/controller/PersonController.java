@@ -24,7 +24,6 @@ import by.javaeecources.model.PagerModel;
 import by.javaeecources.model.Person;
 import by.javaeecources.model.PersonDto;
 import by.javaeecources.service.PersonService;
-
 @Controller
 public class PersonController {
 	private static final int BUTTONS_TO_SHOW = 5;
