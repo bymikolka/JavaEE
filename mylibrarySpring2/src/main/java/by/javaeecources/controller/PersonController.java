@@ -1,5 +1,7 @@
 package by.javaeecources.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +35,22 @@ public class PersonController {
 
 	@Autowired
 	PersonService personService;
-
+	
+	
+	Map<Long, String> mapRoles = null;
+	public Map<Long, String> getRoles() {
+		if(mapRoles!=null) {
+			return mapRoles;
+		}
+		mapRoles = new HashMap<>();
+	    mapRoles.put(1L, "Teacher");
+	    mapRoles.put(2L, "Student");
+	    return mapRoles;
+	}
+	
+	
+	
+	
 	@GetMapping(value = {"/", "/search/persons"})
     public ModelAndView home(@RequestParam("pageSize") Optional<Integer> pageSize, @RequestParam("page") Optional<Integer> page, HttpServletRequest request, Optional<PersonDto> dto) {
     	ModelAndView modelAndView = new ModelAndView("index");
@@ -58,6 +75,9 @@ public class PersonController {
         modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.addObject("pager", pager);
         modelAndView.addObject("person", new Person()); 
+        modelAndView.addObject("mapRoles", mapRoles);
+        mapRoles = getRoles();
+
         return modelAndView;
     	
     }
@@ -72,7 +92,7 @@ public class PersonController {
 	public String create(@ModelAttribute("person") PersonDto personDto, BindingResult bindingResult, Model model) {
 		Person person = new Person();
 		BeanUtils.copyProperties(personDto, person);
-
+		model.addAttribute("mapRoles", mapRoles);
 		Optional<Person> optional = Optional.of(personService.createOrUpdatePerson(person));
 		if(optional.isPresent() && optional.get().getId()!=0) {
 			return "redirect:/";
@@ -89,6 +109,7 @@ public class PersonController {
 			Optional<Person> personOptional = personService.findById(id.get());
 			if (personOptional.isPresent()) {
 				model.addAttribute("person", personOptional.get());
+			    model.addAttribute("mapRoles", mapRoles);
 			}
 		}
 

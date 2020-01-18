@@ -63,15 +63,24 @@
                                  		<td th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error">Description Error</td>
                     				</tr>
                             </div>
+
                             <div class="form-group col-md-8">
                     				<tr>
                                         <td><label for="role" class="col-form-label">Role</label></td> 
-                                        
-                                        <td><select th:field="*{role}">
+                                       
+                                        <td><!--select th:field="*{role}">
                                                 <option th:value="1" th:text="Teacher"></option>
                                                 <option th:value="2" th:text="Student"></option>
-                                            </select>
-                                        </td>
+                                            </select-->
+                                            
+                                             <select id="role" name="role">
+												<option th:each="key : ${mapRoles.keySet()}"
+													th:value="${key}" th:utext="${mapRoles.get(key)}"
+													th:selected="${key==person.role}">
+												</option>
+
+										</select>
+    					</td>
                                  		<td th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error">Role Error</td>
                     				</tr>
                             </div>
