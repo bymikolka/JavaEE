@@ -1,4 +1,4 @@
-package by.javaeecources;
+package by.javaeecources.tests;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,17 +79,5 @@ class MylibrarySpringApplicationTests {
 	    //Assert.assertTrue(repository.findById(1L).isPresent());
 	    
 	}
-	@Autowired
-	PersonService personService;
-	@Test
-	void testService(){
-		Person person = new Person(1L, "firstname", "lastname", "username", "email", "description");
-		personService.createOrUpdatePerson(person);
-	    Assert.assertNotNull(personService.findByFirstname("firstname"));
-	    
-	   // Assert.assertTrue(personService.findById(1L).isPresent());
-	    //personService.delete(1L);
-	    
-	    
-	}
+
 }

@@ -1,4 +1,4 @@
-package by.javaeecources;
+package by.javaeecources.tests;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
