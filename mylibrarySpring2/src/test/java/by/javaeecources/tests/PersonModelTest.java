@@ -4,9 +4,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.javaeecources.model.Person;
-
+@Transactional
 class PersonModelTest {
 
 	@Test
@@ -18,8 +19,8 @@ class PersonModelTest {
 		person.setId(100L);
 		Assert.assertEquals(100L, person.getId().longValue());
 		
-		person.setFirstname("firstname");
-		Assert.assertEquals(person.getFirstname(), "firstname");
+		person.setFirstname("firstnameTest");
+		Assert.assertEquals(person.getFirstname(), "firstnameTest");
 		person.setLastname("lastname");
 		Assert.assertEquals(person.getLastname(), "lastname");
 		person.setUsername("username");

@@ -1,6 +1,4 @@
-package by.javaeecources.service;
-
-import java.util.Optional;
+package by.javaeecources.tests;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -10,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import by.javaeecources.model.Person;
+import by.javaeecources.service.PersonService;
 @SpringBootTest
 class PersonServiceTest {
 
