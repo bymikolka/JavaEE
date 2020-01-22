@@ -77,8 +77,9 @@ public class PersonController {
 		personService.delete(id);
 		return "redirect:/";
 	}
+	
+	
 	@Transactional
-
     @PostMapping("/savePerson")
     public String savePerson(@ModelAttribute("person") PersonDto personDto) {
 		Person person = new Person();
