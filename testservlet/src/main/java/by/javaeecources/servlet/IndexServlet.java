@@ -20,24 +20,29 @@ public class IndexServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
+			PrintWriter out = response.getWriter();
+			//ServletOutputStream out = response.getOutputStream();
 
-		PrintWriter out = response.getWriter();
-		//ServletOutputStream out = response.getOutputStream();
+			out.println("<html>");
+			out.println("<head>");
+			out.println(
+					"<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\">");
+			out.println("<title>Hello Servlet</title></head>");
 
-		out.println("<html>");
-		out.println("<head>");
-		out.println(
-				"<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\">");
-		out.println("<title>Hello Servlet</title></head>");
+			out.println("<body>");
+			out.println("<h3>Hello, I'm Index Servlet!!</h3>");
+			out.println("<div class=\"alert alert-dark\" role=\"alert\">");
+			out.println("<h6 class=\"display-1\"><a href=\"hello\">to Hello World Servlet</a></h6>");
+			out.println("</div>");
 
-		out.println("<body>");
-		out.println("<h3>Hello, I'm Index Servlet!!</h3>");
-		out.println("<div class=\"alert alert-dark\" role=\"alert\">");
-		out.println("<h6 class=\"display-1\"><a href=\"hello\">to Hello World Servlet</a></h6>");
-		out.println("</div>");
+			out.println("</body>");
+			out.println("<html>");
+		  }
+		  catch (Exception uhex) {
+			  System.err.println("IndexServlet "+uhex.getMessage());
+		  }
 
-		out.println("</body>");
-		out.println("<html>");
 	}
 
 	@Override

@@ -1,0 +1,30 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+        
+<hibernate-configuration>
+	<session-factory>
+		<!-- Database connection settings -->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://127.0.0.1:5432/library</property>
+		<property name="hibernate.connection.username">myuser</property>
+		<property name="hibernate.connection.password">mypass</property>
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="hibernate.connection.pool_size">100</property>
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">true</property>
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.connection.CharSet">utf8</property>
+		<property name="hibernate.connection.characterEncoding">utf8</property>
+		<property name="hibernate.connection.useUnicode">true</property>
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">true</property>
+		
+		<mapping class="by.javaeecources.entities.Person" />
+		<mapping class="by.javaeecources.entities.UserAccount" />
+		<mapping class="by.javaeecources.entities.Student" />
+		<mapping class="by.javaeecources.entities.Teacher" />
+	</session-factory>
+</hibernate-configuration>
